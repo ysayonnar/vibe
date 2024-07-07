@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common'
 import { PlaceModule } from './place/place.module'
 import { ConfigModule } from '@nestjs/config'
 import { SequelizeModule } from '@nestjs/sequelize'
-import { profileEnd } from 'console'
+import { Place } from './place/place.model'
 
 @Module({
 	imports: [
@@ -18,7 +18,7 @@ import { profileEnd } from 'console'
 			username: process.env.DATABASE_USERNAME,
 			password: process.env.DATABASE_PASSWORD,
 			database: process.env.DATABASE_NAME,
-			models: [],
+			models: [Place],
 			autoLoadModels: true,
 		}),
 	],
