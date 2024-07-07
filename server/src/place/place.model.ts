@@ -6,7 +6,7 @@ import {
 	Table,
 } from 'sequelize-typescript'
 
-interface PlaceCreation {
+export interface PlaceCreation {
 	longtitude: string
 	width: string
 	name: string
