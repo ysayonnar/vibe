@@ -7,17 +7,27 @@ export class PlaceController {
 	constructor(readonly placeService: PlaceService) {}
 
 	@Get()
-	async getAllPlaces() {}
+	async getAllPlaces() {
+		return this.placeService.getAllPlaces()
+	}
 
 	@Get('/:id')
-	async getPlaceById(@Param('id') id: number) {}
+	async getPlaceById(@Param('id') id: number) {
+		return this.placeService.getPlaceById(id)
+	}
 
 	@Post('/create')
-	async createPlace(@Body() placeDto: PlaceCreation) {}
+	async createPlace(@Body() placeDto: PlaceCreation) {
+		return this.placeService.createPlace(placeDto)
+	}
 
-	@Put('/update')
-	async changePlace(@Body() placeDto: PlaceCreation) {}
+	@Put('/update/:id')
+	async changePlace(@Body() placeDto: PlaceCreation, @Param('id') id: number) {
+		return this.placeService.updatePlace(placeDto, id)
+	}
 
 	@Delete('/delete/:id')
-	async deletePlace(@Param('id') id: number) {}
+	async deletePlace(@Param('id') id: number) {
+		return this.placeService.delete(id)
+	}
 }

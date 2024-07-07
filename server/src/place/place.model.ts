@@ -7,8 +7,8 @@ import {
 } from 'sequelize-typescript'
 
 export interface PlaceCreation {
-	longtitude: string
-	width: string
+	longtitude: number
+	width: number
 	name: string
 	description: string
 	//userId: number -- foreign key
@@ -24,11 +24,11 @@ export class Place extends Model<Place, PlaceCreation> {
 	})
 	id: number
 
-	@Column({ type: DataType.STRING, allowNull: false })
-	longtitude: string
+	@Column({ type: DataType.FLOAT, allowNull: false })
+	longtitude: number
 
-	@Column({ type: DataType.STRING, allowNull: false })
-	width: string
+	@Column({ type: DataType.FLOAT, allowNull: false })
+	width: number
 
 	@Column({ type: DataType.STRING, unique: true, allowNull: false })
 	name: string
@@ -39,8 +39,8 @@ export class Place extends Model<Place, PlaceCreation> {
 	// @Column({ type: DataType.NUMBER })
 	// photos: boolean
 
-	@Column({ type: DataType.INTEGER, defaultValue: 0 })
-	calculatedRating: string
+	@Column({ type: DataType.FLOAT, defaultValue: 0 })
+	calculatedRating: number
 
 	// @Column({type: ForeignKey})
 	// userId: number`
