@@ -3,6 +3,8 @@ import { PlaceModule } from './place/place.module'
 import { ConfigModule } from '@nestjs/config'
 import { SequelizeModule } from '@nestjs/sequelize'
 import { Place } from './place/place.model'
+import { RolesModule } from './roles/roles.module'
+import { Role } from './roles/roles.model'
 
 @Module({
 	imports: [
@@ -18,9 +20,10 @@ import { Place } from './place/place.model'
 			username: process.env.DATABASE_USERNAME,
 			password: process.env.DATABASE_PASSWORD,
 			database: process.env.DATABASE_NAME,
-			models: [Place],
+			models: [Place, Role],
 			autoLoadModels: true,
 		}),
+		RolesModule,
 	],
 	controllers: [],
 	providers: [],
