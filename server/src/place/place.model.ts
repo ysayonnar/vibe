@@ -30,7 +30,7 @@ export class Place extends Model<Place, PlaceCreation> {
 	@Column({ type: DataType.FLOAT, allowNull: false })
 	width: number
 
-	@Column({ type: DataType.STRING, unique: true, allowNull: false })
+	@Column({ type: DataType.STRING, unique: false, allowNull: false })
 	name: string
 
 	@Column({ type: DataType.STRING(1000), unique: false, allowNull: true })

@@ -20,7 +20,16 @@ export class PlaceService {
 	}
 
 	async createPlace(dto: PlaceCreation) {
-		//тут сделать проверку чтобы люди не добавляли одни и те же места(по долготе и ширине)
+		const existingPlace = await this.PlaceRepository.findOne({
+			where: { longtitude: dto.longtitude, width: dto.width },
+		})
+		if (existingPlace) {
+			throw new HttpException(
+				'This place already exists.',
+				HttpStatus.BAD_REQUEST
+			)
+		}
+
 		const createdPLace = await this.PlaceRepository.create(dto)
 		if (createdPLace) {
 			return createdPLace
