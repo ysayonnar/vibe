@@ -3,6 +3,7 @@ import { User } from './user.model'
 import { UserCreationDto } from './dto/user-creation.dto'
 import { InjectModel } from '@nestjs/sequelize'
 import { RolesService } from 'src/roles/roles.service'
+import { Role } from 'src/roles/roles.model'
 
 @Injectable()
 export class UserService {
@@ -12,14 +13,16 @@ export class UserService {
 	) {}
 
 	async getAllUsers() {
-		const users = await this.userRepository.findAll({ include: { all: true } })
+		const users = await this.userRepository.findAll({
+			include: { model: Role, attributes: ['id', 'name', 'description'] },
+		})
 		return users
 	}
 
 	async getUserById(id: number) {
 		const user = await this.userRepository.findOne({
 			where: { id },
-			include: { all: true },
+			include: { model: Role, attributes: ['id', 'name', 'description'] },
 		})
 		if (!user) {
 			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
@@ -30,7 +33,7 @@ export class UserService {
 	async getUserByUsername(username: string) {
 		const user = await this.userRepository.findOne({
 			where: { username },
-			include: { all: true },
+			include: { model: Role, attributes: ['id', 'name', 'description'] },
 		})
 		if (!user) {
 			throw new HttpException(
@@ -44,7 +47,7 @@ export class UserService {
 	async getUserByEmail(email: string) {
 		const user = await this.userRepository.findOne({
 			where: { email },
-			include: { all: true },
+			include: { model: Role, attributes: ['id', 'name', 'description'] },
 		})
 		if (!user) {
 			throw new HttpException('No user with such email', HttpStatus.NOT_FOUND)
