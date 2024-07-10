@@ -25,7 +25,7 @@ export class User extends Model<User, UserCreationInterface> {
 	})
 	id: number
 
-	@Column({ type: DataType.STRING, unique: false, allowNull: false })
+	@Column({ type: DataType.STRING, unique: true, allowNull: false })
 	username: string
 
 	@Column({ type: DataType.STRING, unique: true, allowNull: false })

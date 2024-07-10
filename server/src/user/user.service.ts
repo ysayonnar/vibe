@@ -1,17 +1,75 @@
-import { Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { User } from './user.model'
 import { UserCreationDto } from './dto/user-creation.dto'
 import { InjectModel } from '@nestjs/sequelize'
+import { RolesService } from 'src/roles/roles.service'
 
 @Injectable()
 export class UserService {
-	constructor(@InjectModel(User) private userRepository: typeof User) {}
+	constructor(
+		@InjectModel(User) private userRepository: typeof User,
+		private roleService: RolesService
+	) {}
 
-	async getAllUsers() {}
+	async getAllUsers() {
+		const users = await this.userRepository.findAll({ include: { all: true } })
+		return users
+	}
 
-	async getUserById(id: number) {}
+	async getUserById(id: number) {
+		const user = await this.userRepository.findOne({
+			where: { id },
+			include: { all: true },
+		})
+		if (!user) {
+			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
+		}
+		return user
+	}
 
-	async getUserByUsername(username: string) {}
+	async getUserByUsername(username: string) {
+		const user = await this.userRepository.findOne({
+			where: { username },
+			include: { all: true },
+		})
+		if (!user) {
+			throw new HttpException(
+				'No user with such username',
+				HttpStatus.NOT_FOUND
+			)
+		}
+		return user
+	}
 
-	async createUser(dto: UserCreationDto) {}
+	async getUserByEmail(email: string) {
+		const user = await this.userRepository.findOne({
+			where: { email },
+			include: { all: true },
+		})
+		if (!user) {
+			throw new HttpException('No user with such email', HttpStatus.NOT_FOUND)
+		}
+		return user
+	}
+
+	async createUser(dto: UserCreationDto) {
+		const candidateByEmail = await this.userRepository.findOne({
+			where: { email: dto.email },
+		})
+		const candidateByUsername = await this.userRepository.findOne({
+			where: { username: dto.username },
+		})
+		if (candidateByEmail || candidateByUsername) {
+			throw new HttpException(
+				'User with such email or username already exists',
+				HttpStatus.BAD_REQUEST
+			)
+		}
+		const role = await this.roleService.getRoleByName('USER')
+		const user = await this.userRepository.create(dto)
+		await user.$set('roles', [role.id])
+		user.roles = [role]
+		await user.save()
+		return user
+	}
 }
