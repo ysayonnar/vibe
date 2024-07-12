@@ -12,6 +12,22 @@ export class UserService {
 		private roleService: RolesService
 	) {}
 
+	async checkEmailUsername(dto: UserCreationDto) {
+		const candidateByEmail = await this.userRepository.findOne({
+			where: { email: dto.email },
+		})
+		const candidateByUsername = await this.userRepository.findOne({
+			where: { username: dto.username },
+		})
+		if (candidateByEmail || candidateByUsername) {
+			throw new HttpException(
+				'User with such email or username already exists',
+				HttpStatus.BAD_REQUEST
+			)
+		}
+		return true
+	}
+
 	async getAllUsers() {
 		const users = await this.userRepository.findAll({
 			include: { model: Role, attributes: ['id', 'name', 'description'] },
@@ -56,18 +72,7 @@ export class UserService {
 	}
 
 	async createUser(dto: UserCreationDto) {
-		const candidateByEmail = await this.userRepository.findOne({
-			where: { email: dto.email },
-		})
-		const candidateByUsername = await this.userRepository.findOne({
-			where: { username: dto.username },
-		})
-		if (candidateByEmail || candidateByUsername) {
-			throw new HttpException(
-				'User with such email or username already exists',
-				HttpStatus.BAD_REQUEST
-			)
-		}
+		await this.checkEmailUsername(dto)
 		const role = await this.roleService.getRoleByName('USER')
 		const user = await this.userRepository.create(dto)
 		await user.$set('roles', [role.id])

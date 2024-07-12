@@ -1,0 +1,52 @@
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { JwtModule, JwtService } from '@nestjs/jwt'
+import { UserCreationDto } from 'src/user/dto/user-creation.dto'
+import { UserService } from 'src/user/user.service'
+import * as bcrypt from 'bcryptjs'
+import { User } from 'src/user/user.model'
+
+@Injectable()
+export class AuthService {
+	constructor(
+		private jwtService: JwtService,
+		private userService: UserService
+	) {}
+
+	private async generateToken(user: User) {
+		const payload = {
+			id: user.id,
+			email: user.email,
+			username: user.username,
+			roles: user.roles,
+		}
+		return {
+			token: this.jwtService.sign(payload),
+		}
+	}
+
+	private async validateUser(dto: UserCreationDto) {
+		const user = await this.userService.getUserByEmail(dto.email)
+		const password_equals = await bcrypt.compare(
+			dto.password_hash,
+			user.password_hash
+		)
+		if (password_equals) {
+			return user
+		}
+		throw new HttpException('Password is not valid', HttpStatus.BAD_REQUEST)
+	}
+
+	async registration(dto: UserCreationDto) {
+		const hash = await bcrypt.hash(dto.password_hash, 5)
+		const user = await this.userService.createUser({
+			...dto,
+			password_hash: hash,
+		})
+		return this.generateToken(user)
+	}
+
+	async login(dto) {
+		const user = await this.validateUser(dto)
+		return this.generateToken(user)
+	}
+}
