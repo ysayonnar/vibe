@@ -4,6 +4,8 @@ import { UserCreationDto } from './dto/user-creation.dto'
 import { InjectModel } from '@nestjs/sequelize'
 import { RolesService } from 'src/roles/roles.service'
 import { Role } from 'src/roles/roles.model'
+import { GiveRoleDto } from './dto/giveRole.dto'
+import { BanUserDto } from './dto/banUser.dto'
 
 @Injectable()
 export class UserService {
@@ -81,14 +83,44 @@ export class UserService {
 		return user
 	}
 
-	async addRoleAdmin(id) {
-		const user = await this.userRepository.findOne({ where: { id } })
+	async giveRole(dto: GiveRoleDto) {
+		const user: User = await this.userRepository.findByPk(dto.userId)
 		if (!user) {
 			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
 		}
-		const adminRole = await this.roleService.getRoleByName('ADMIN')
-		await user.$set('roles', [adminRole.id])
-		user.roles = [adminRole]
+		const role = await this.roleService.getRoleByName(dto.roleName)
+		await user.$add('role', role.id)
+		return user
+	}
+
+	async removeRole(dto: GiveRoleDto) {
+		const user: User = await this.userRepository.findByPk(dto.userId)
+		if (!user) {
+			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
+		}
+		const role = await this.roleService.getRoleByName(dto.roleName)
+		await user.$remove('role', role.id)
+		return user
+	}
+
+	async banUser(dto: BanUserDto) {
+		const user: User = await this.userRepository.findByPk(dto.userId)
+		if (!user) {
+			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
+		}
+		user.isBanned = true
+		user.banReason = dto.banReason
+		await user.save()
+		return user
+	}
+
+	async unbanUser(id: number) {
+		const user: User = await this.userRepository.findByPk(id)
+		if (!user) {
+			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
+		}
+		user.isBanned = false
+		user.banReason = null
 		await user.save()
 		return user
 	}

@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common'
 import { UserService } from './user.service'
 import { UserCreationDto } from './dto/user-creation.dto'
+import { GiveRoleDto } from './dto/giveRole.dto'
+import { BanUserDto } from './dto/banUser.dto'
 
 @Controller('user')
 export class UserController {
@@ -31,8 +33,23 @@ export class UserController {
 		return this.userService.createUser(dto)
 	}
 
-	@Get('/give_admin/:id')
-	async makeAdmin(@Param('id') id: number) {
-		return this.userService.addRoleAdmin(id)
+	@Post('/give_role')
+	async giveRole(@Body() dto: GiveRoleDto) {
+		return this.userService.giveRole(dto)
+	}
+
+	@Post('/remove_role')
+	async removeRole(@Body() dto: GiveRoleDto) {
+		return this.userService.removeRole(dto)
+	}
+
+	@Post('/ban')
+	async banUser(@Body() dto: BanUserDto) {
+		return this.userService.banUser(dto)
+	}
+
+	@Get('/unban/:id')
+	async unbanUser(@Param('id') id: number) {
+		return this.userService.unbanUser(id)
 	}
 }

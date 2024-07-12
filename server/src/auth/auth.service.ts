@@ -4,6 +4,7 @@ import { UserCreationDto } from 'src/user/dto/user-creation.dto'
 import { UserService } from 'src/user/user.service'
 import * as bcrypt from 'bcryptjs'
 import { User } from 'src/user/user.model'
+import { loginDto } from './dto/login.dto'
 
 @Injectable()
 export class AuthService {
@@ -38,10 +39,10 @@ export class AuthService {
 		}
 	}
 
-	private async validateUser(dto: UserCreationDto) {
+	private async validateUser(dto: loginDto) {
 		const user = await this.userService.getUserByEmail(dto.email)
 		const password_equals = await bcrypt.compare(
-			dto.password_hash,
+			dto.password,
 			user.password_hash
 		)
 		if (password_equals) {
@@ -68,7 +69,7 @@ export class AuthService {
 		return this.generateToken(user)
 	}
 
-	async login(dto) {
+	async login(dto: loginDto) {
 		if (!this.validateEmail(dto.email)) {
 			throw new HttpException('Email is incorrect', HttpStatus.BAD_REQUEST)
 		}
