@@ -20,6 +20,4 @@ export class AuthController {
 	async login(@Body() dto: loginDto) {
 		return this.authService.login(dto)
 	}
-
-	async auth() {}
 }

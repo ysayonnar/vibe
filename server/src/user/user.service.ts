@@ -80,4 +80,16 @@ export class UserService {
 		await user.save()
 		return user
 	}
+
+	async addRoleAdmin(id) {
+		const user = await this.userRepository.findOne({ where: { id } })
+		if (!user) {
+			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
+		}
+		const adminRole = await this.roleService.getRoleByName('ADMIN')
+		await user.$set('roles', [adminRole.id])
+		user.roles = [adminRole]
+		await user.save()
+		return user
+	}
 }

@@ -30,4 +30,9 @@ export class UserController {
 	async createUser(@Body() dto: UserCreationDto) {
 		return this.userService.createUser(dto)
 	}
+
+	@Get('/give_admin/:id')
+	async makeAdmin(@Param('id') id: number) {
+		return this.userService.addRoleAdmin(id)
+	}
 }
