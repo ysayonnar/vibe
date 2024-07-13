@@ -20,4 +20,24 @@ export class FriendController {
 	async declineFriendRequest(@Param('id') id: number) {
 		return this.friendService.declineFriendRequest(id)
 	}
+
+	@Get('/delete/:id')
+	async deleteFriend(@Param('id') id: number) {
+		return this.friendService.deleteFriend(id)
+	}
+
+	@Get('/sended/:id')
+	async getSendedRequests(@Param('id') id: number) {
+		return this.friendService.getSendedRequests(id)
+	}
+
+	@Get('/received/:id')
+	async getReceivedRequests(@Param('id') id: number) {
+		return this.friendService.getReceivedRequests(id)
+	}
+
+	@Get('/list/:id')
+	async getFriends(@Param('id') id: number) {
+		return this.friendService.getFriends(id)
+	}
 }

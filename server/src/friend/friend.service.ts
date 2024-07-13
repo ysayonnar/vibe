@@ -17,6 +17,12 @@ export class FriendService {
 	) {}
 
 	async sendFriendRequest(dto: RequestDto) {
+		const candidate = await this.friendRepository.findAll({
+			where: { friendId: dto.recipientId },
+		})
+		if (candidate) {
+			throw new HttpException('Already friends', HttpStatus.BAD_REQUEST)
+		}
 		const sender = await this.userService.getUserById(dto.senderId)
 		const recipient = await this.userService.getUserById(dto.recipientId)
 		const request = await this.friendRequestRepositoty.create(dto)
@@ -51,11 +57,48 @@ export class FriendService {
 		const declined = await this.friendRequestRepositoty.destroy({
 			where: { id },
 		})
-		if (declined == 1) {
+		if (declined === 1) {
 			return { msg: 'declined' }
 		}
-		if (declined == 0) {
+		if (declined === 0) {
 			throw new HttpException('No request with such id', HttpStatus.NOT_FOUND)
 		}
+	}
+
+	async deleteFriend(id: number) {
+		const deletedFriend = await this.friendRepository.destroy({ where: { id } })
+		if (deletedFriend === 1) {
+			return { msg: 'friend deleted' }
+		}
+		if (deletedFriend === 0) {
+			throw new HttpException('No friend with such id', HttpStatus.NOT_FOUND)
+		}
+	}
+
+	async getSendedRequests(userId) {
+		const user: User = await this.userRepository.findOne({
+			where: { id: userId },
+			include: { all: true },
+		})
+		return user.sended_friend_requests
+	}
+
+	async getReceivedRequests(userId) {
+		const user: User = await this.userRepository.findOne({
+			where: { id: userId },
+			include: { all: true },
+		})
+		return user.friend_requests
+	}
+
+	async getFriends(userId) {
+		const user: User = await this.userRepository.findOne({
+			where: { id: userId },
+			include: { all: true },
+		})
+		const friends = await this.userRepository.findAll({
+			where: { id: user.friends.map(friend => friend.friendId) },
+		})
+		return friends
 	}
 }

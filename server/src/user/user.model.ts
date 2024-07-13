@@ -58,7 +58,7 @@ export class User extends Model<User, UserCreationInterface> {
 	@BelongsToMany(() => Role, () => UserRoles)
 	roles: Role[]
 
-	@HasMany(() => Friend, 'friendId')
+	@HasMany(() => Friend, 'userId')
 	friends: Friend[]
 
 	@HasMany(() => FriendRequest, 'senderId')
