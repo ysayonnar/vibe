@@ -3,6 +3,8 @@ import { UserService } from './user.service'
 import { UserCreationDto } from './dto/user-creation.dto'
 import { GiveRoleDto } from './dto/giveRole.dto'
 import { BanUserDto } from './dto/banUser.dto'
+import { EditBioDto } from './dto/editBio.dto'
+import { EditTguserDto } from './dto/editTguser.dto'
 
 @Controller('user')
 export class UserController {
@@ -51,5 +53,15 @@ export class UserController {
 	@Get('/unban/:id')
 	async unbanUser(@Param('id') id: number) {
 		return this.userService.unbanUser(id)
+	}
+
+	@Post('/bio')
+	async editBio(@Body() dto: EditBioDto) {
+		return this.userService.edtiBio(dto)
+	}
+
+	@Post('/tg')
+	async editTguser(@Body() dto: EditTguserDto) {
+		return this.userService.editTguser(dto)
 	}
 }

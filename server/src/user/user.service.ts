@@ -6,6 +6,8 @@ import { RolesService } from 'src/roles/roles.service'
 import { Role } from 'src/roles/roles.model'
 import { GiveRoleDto } from './dto/giveRole.dto'
 import { BanUserDto } from './dto/banUser.dto'
+import { EditBioDto } from './dto/editBio.dto'
+import { EditTguserDto } from './dto/editTguser.dto'
 
 @Injectable()
 export class UserService {
@@ -13,6 +15,14 @@ export class UserService {
 		@InjectModel(User) private userRepository: typeof User,
 		private roleService: RolesService
 	) {}
+
+	private async findUser(id: number) {
+		const user: User = await this.userRepository.findByPk(id)
+		if (!user) {
+			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
+		}
+		return user
+	}
 
 	async checkEmailUsername(dto: UserCreationDto) {
 		const candidateByEmail = await this.userRepository.findOne({
@@ -84,30 +94,21 @@ export class UserService {
 	}
 
 	async giveRole(dto: GiveRoleDto) {
-		const user: User = await this.userRepository.findByPk(dto.userId)
-		if (!user) {
-			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
-		}
+		const user: User = await this.findUser(dto.userId)
 		const role = await this.roleService.getRoleByName(dto.roleName)
 		await user.$add('role', role.id)
 		return user
 	}
 
 	async removeRole(dto: GiveRoleDto) {
-		const user: User = await this.userRepository.findByPk(dto.userId)
-		if (!user) {
-			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
-		}
+		const user: User = await this.findUser(dto.userId)
 		const role = await this.roleService.getRoleByName(dto.roleName)
 		await user.$remove('role', role.id)
 		return user
 	}
 
 	async banUser(dto: BanUserDto) {
-		const user: User = await this.userRepository.findByPk(dto.userId)
-		if (!user) {
-			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
-		}
+		const user: User = await this.findUser(dto.userId)
 		user.isBanned = true
 		user.banReason = dto.banReason
 		await user.save()
@@ -115,12 +116,29 @@ export class UserService {
 	}
 
 	async unbanUser(id: number) {
-		const user: User = await this.userRepository.findByPk(id)
-		if (!user) {
-			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
-		}
+		const user: User = await this.findUser(id)
 		user.isBanned = false
 		user.banReason = null
+		await user.save()
+		return user
+	}
+
+	async edtiBio(dto: EditBioDto) {
+		const user: User = await this.findUser(dto.userId)
+		user.bio = dto.bio
+		await user.save()
+		return user
+	}
+
+	async editTguser(dto: EditTguserDto) {
+		const user: User = await this.findUser(dto.userId)
+		if (dto.telegram_username[0] !== '@') {
+			throw new HttpException(
+				'Incorrect telegram username',
+				HttpStatus.BAD_REQUEST
+			)
+		}
+		user.telegram_username = dto.telegram_username
 		await user.save()
 		return user
 	}
