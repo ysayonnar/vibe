@@ -6,6 +6,8 @@ import {
 	Model,
 	Table,
 } from 'sequelize-typescript'
+import { Friend } from 'src/friend/friend.model'
+import { FriendRequest } from 'src/friend/friend_request.model'
 import { Role } from 'src/roles/roles.model'
 import { UserRoles } from 'src/roles/user-roles.model'
 
@@ -50,12 +52,18 @@ export class User extends Model<User, UserCreationInterface> {
 	@Column({ type: DataType.STRING, allowNull: true })
 	banReason: string
 
-	// @Column({ type: DataType.STRING, unique: false, allowNull: false })
-	// friendList: string
-
 	@Column({ type: DataType.STRING, unique: true, allowNull: true })
 	telegram_username: string
 
 	@BelongsToMany(() => Role, () => UserRoles)
 	roles: Role[]
+
+	@HasMany(() => Friend, 'friendId')
+	friends: Friend[]
+
+	@HasMany(() => FriendRequest, 'senderId')
+	sended_friend_requests: FriendRequest[]
+
+	@HasMany(() => FriendRequest, 'recipientId')
+	friend_requests: FriendRequest[]
 }

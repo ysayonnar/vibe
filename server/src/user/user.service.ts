@@ -42,7 +42,7 @@ export class UserService {
 
 	async getAllUsers() {
 		const users = await this.userRepository.findAll({
-			include: { model: Role, attributes: ['id', 'name', 'description'] },
+			include: { all: true },
 		})
 		return users
 	}
