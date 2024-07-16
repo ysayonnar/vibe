@@ -13,12 +13,15 @@ import { BanUserDto } from './dto/banUser.dto'
 import { EditBioDto } from './dto/editBio.dto'
 import { EditTguserDto } from './dto/editTguser.dto'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { Roles } from 'src/auth/roles-auth.decorator'
+import { RolesGuard } from 'src/auth/roles.guard'
 
 @Controller('user')
 export class UserController {
 	constructor(readonly userService: UserService) {}
 
-	@UseGuards(JwtAuthGuard)
+	@Roles('ADMIN')
+	@UseGuards(RolesGuard)
 	@Get()
 	async getAllUsers() {
 		return this.userService.getAllUsers()
