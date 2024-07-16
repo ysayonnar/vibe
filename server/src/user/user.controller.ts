@@ -1,15 +1,24 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import {
+	Body,
+	Controller,
+	Get,
+	Param,
+	Post,
+	Req,
+	UseGuards,
+} from '@nestjs/common'
 import { UserService } from './user.service'
-import { UserCreationDto } from './dto/user-creation.dto'
 import { GiveRoleDto } from './dto/giveRole.dto'
 import { BanUserDto } from './dto/banUser.dto'
 import { EditBioDto } from './dto/editBio.dto'
 import { EditTguserDto } from './dto/editTguser.dto'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 
 @Controller('user')
 export class UserController {
 	constructor(readonly userService: UserService) {}
 
+	@UseGuards(JwtAuthGuard)
 	@Get()
 	async getAllUsers() {
 		return this.userService.getAllUsers()
@@ -30,10 +39,10 @@ export class UserController {
 		return this.userService.getUserByEmail(email)
 	}
 
-	@Post('/create')
-	async createUser(@Body() dto: UserCreationDto) {
-		return this.userService.createUser(dto)
-	}
+	// @Post('/create')
+	// async createUser(@Body() dto: UserCreationDto) {
+	// 	return this.userService.createUser(dto)
+	// }
 
 	@Post('/give_role')
 	async giveRole(@Body() dto: GiveRoleDto) {

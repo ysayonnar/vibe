@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { UserModule } from 'src/user/user.module'
@@ -13,11 +13,12 @@ import { ConfigModule } from '@nestjs/config'
 	imports: [
 		ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
 		SequelizeModule.forFeature([User]),
-		UserModule,
+		forwardRef(() => UserModule),
 		JwtModule.register({
 			secret: process.env.SECRET_KEY,
 			signOptions: { expiresIn: '24h' },
 		}),
 	],
+	exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
