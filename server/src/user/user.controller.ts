@@ -57,23 +57,29 @@ export class UserController {
 		return this.userService.removeRole(dto)
 	}
 
+	@Roles('ADMIN')
+	@UseGuards(RolesGuard)
 	@Post('/ban')
 	async banUser(@Body() dto: BanUserDto) {
 		return this.userService.banUser(dto)
 	}
 
+	@Roles('ADMIN')
+	@UseGuards(RolesGuard)
 	@Get('/unban/:id')
 	async unbanUser(@Param('id') id: number) {
 		return this.userService.unbanUser(id)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Post('/bio')
-	async editBio(@Body() dto: EditBioDto) {
-		return this.userService.edtiBio(dto)
+	async editBio(@Body() dto: EditBioDto, @Req() req: Request) {
+		return this.userService.edtiBio(dto, req)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Post('/tg')
-	async editTguser(@Body() dto: EditTguserDto) {
-		return this.userService.editTguser(dto)
+	async editTguser(@Body() dto: EditTguserDto, @Req() req: Request) {
+		return this.userService.editTguser(dto, req)
 	}
 }

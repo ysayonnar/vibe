@@ -16,13 +16,13 @@ export class UserService {
 		private roleService: RolesService
 	) {}
 
-	private async findUser(id: number) {
-		const user: User = await this.userRepository.findByPk(id)
-		if (!user) {
-			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
-		}
-		return user
-	}
+	// private async findUser(id: number) {
+	// 	const user: User = await this.userRepository.findByPk(id)
+	// 	if (!user) {
+	// 		throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
+	// 	}
+	// 	return user
+	// }
 
 	async checkEmailUsername(dto: UserCreationDto) {
 		const candidateByEmail = await this.userRepository.findOne({
@@ -94,21 +94,24 @@ export class UserService {
 	}
 
 	async giveRole(dto: GiveRoleDto) {
-		const user: User = await this.findUser(dto.userId)
+		const user: User = await this.getUserById(dto.userId)
 		const role = await this.roleService.getRoleByName(dto.roleName)
 		await user.$add('role', role.id)
 		return user
 	}
 
 	async removeRole(dto: GiveRoleDto) {
-		const user: User = await this.findUser(dto.userId)
+		const user: User = await this.getUserById(dto.userId)
 		const role = await this.roleService.getRoleByName(dto.roleName)
 		await user.$remove('role', role.id)
 		return user
 	}
 
 	async banUser(dto: BanUserDto) {
-		const user: User = await this.findUser(dto.userId)
+		const user: User = await this.getUserById(dto.userId)
+		if (user.isBanned === true) {
+			throw new HttpException('User already banned', HttpStatus.BAD_REQUEST)
+		}
 		user.isBanned = true
 		user.banReason = dto.banReason
 		await user.save()
@@ -116,25 +119,40 @@ export class UserService {
 	}
 
 	async unbanUser(id: number) {
-		const user: User = await this.findUser(id)
+		const user: User = await this.getUserById(id)
+		if (user.isBanned === false) {
+			throw new HttpException(
+				'User you want to unban is not banned',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 		user.isBanned = false
 		user.banReason = null
 		await user.save()
 		return user
 	}
 
-	async edtiBio(dto: EditBioDto) {
-		const user: User = await this.findUser(dto.userId)
+	async edtiBio(dto: EditBioDto, req) {
+		const user: User = await this.getUserById(req.user.id)
 		user.bio = dto.bio
 		await user.save()
 		return user
 	}
 
-	async editTguser(dto: EditTguserDto) {
-		const user: User = await this.findUser(dto.userId)
+	async editTguser(dto: EditTguserDto, req) {
+		const user: User = await this.getUserById(req.user.id)
 		if (dto.telegram_username[0] !== '@') {
 			throw new HttpException(
 				'Incorrect telegram username',
+				HttpStatus.BAD_REQUEST
+			)
+		}
+		const candidate = await this.userRepository.findOne({
+			where: { telegram_username: dto.telegram_username },
+		})
+		if (candidate) {
+			throw new HttpException(
+				'User with such telegram already exists',
 				HttpStatus.BAD_REQUEST
 			)
 		}

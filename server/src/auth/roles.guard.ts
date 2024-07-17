@@ -41,7 +41,7 @@ export class RolesGuard implements CanActivate {
 			req.user = user
 			return user.roles.some(role => requiredRoles.includes(role.name))
 		} catch (e) {
-			throw new HttpException('invalid role stack', HttpStatus.FORBIDDEN)
+			throw new HttpException('no roles that required', HttpStatus.FORBIDDEN)
 		}
 	}
 }
