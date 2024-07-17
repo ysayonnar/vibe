@@ -16,10 +16,10 @@ export class RolesService {
 		const role = await this.roleRepository.findOne({
 			where: { name: roleName.toUpperCase() },
 		})
-		if (role) {
-			return role
+		if (!role) {
+			throw new HttpException('No role with such name', HttpStatus.NOT_FOUND)
 		}
-		throw new HttpException('No role with such name', HttpStatus.NOT_FOUND)
+		return role
 	}
 
 	async createRole(dto: CreateRoleDto) {

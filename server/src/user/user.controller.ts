@@ -47,11 +47,15 @@ export class UserController {
 	// 	return this.userService.createUser(dto)
 	// }
 
+	@Roles('ADMIN')
+	@UseGuards(RolesGuard)
 	@Post('/give_role')
 	async giveRole(@Body() dto: GiveRoleDto) {
 		return this.userService.giveRole(dto)
 	}
 
+	@Roles('ADMIN')
+	@UseGuards(RolesGuard)
 	@Post('/remove_role')
 	async removeRole(@Body() dto: GiveRoleDto) {
 		return this.userService.removeRole(dto)
