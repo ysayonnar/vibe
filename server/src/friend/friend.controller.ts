@@ -1,43 +1,59 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import {
+	Body,
+	Controller,
+	Get,
+	Param,
+	Post,
+	Req,
+	UseGuards,
+} from '@nestjs/common'
 import { FriendService } from './friend.service'
 import { RequestDto } from './dto/request-dto'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 
 @Controller('friend')
 export class FriendController {
 	constructor(private friendService: FriendService) {}
 
+	@UseGuards(JwtAuthGuard)
 	@Post('/send')
-	async sendFriendRequest(@Body() dto: RequestDto) {
-		return this.friendService.sendFriendRequest(dto)
+	async sendFriendRequest(@Body() dto: RequestDto, @Req() req: Request) {
+		return this.friendService.sendFriendRequest(dto, req)
 	}
 
-	@Get('/accept/:id')
-	async acceptFriendRequest(@Param('id') id: number) {
-		return this.friendService.acceptFriendRequest(id)
+	@UseGuards(JwtAuthGuard)
+	@Get('/accept/:id') //id - реквеста
+	async acceptFriendRequest(@Param('id') id: number, @Req() req: Request) {
+		return this.friendService.acceptFriendRequest(id, req)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Get('/decline/:id') //id - реквеста
-	async declineFriendRequest(@Param('id') id: number) {
-		return this.friendService.declineFriendRequest(id)
+	async declineFriendRequest(@Param('id') id: number, @Req() req: Request) {
+		return this.friendService.declineFriendRequest(id, req)
 	}
 
-	@Get('/delete/:id')
-	async deleteFriend(@Param('id') id: number) {
-		return this.friendService.deleteFriend(id)
+	@UseGuards(JwtAuthGuard)
+	@Get('/delete/:id') //id - друга
+	async deleteFriend(@Param('id') id: number, @Req() req: Request) {
+		return this.friendService.deleteFriend(id, req)
 	}
 
-	@Get('/sended/:id')
-	async getSendedRequests(@Param('id') id: number) {
-		return this.friendService.getSendedRequests(id)
+	@UseGuards(JwtAuthGuard)
+	@Get('/sended')
+	async getSendedRequests(@Req() req: Request) {
+		return this.friendService.getSendedRequests(req)
 	}
 
-	@Get('/received/:id')
-	async getReceivedRequests(@Param('id') id: number) {
-		return this.friendService.getReceivedRequests(id)
+	@UseGuards(JwtAuthGuard)
+	@Get('/received')
+	async getReceivedRequests(@Req() req: Request) {
+		return this.friendService.getReceivedRequests(req)
 	}
 
-	@Get('/list/:id')
-	async getFriends(@Param('id') id: number) {
-		return this.friendService.getFriends(id)
+	@UseGuards(JwtAuthGuard)
+	@Get('/list')
+	async getFriends(@Req() req: Request) {
+		return this.friendService.getFriends(req)
 	}
 }

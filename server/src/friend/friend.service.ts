@@ -16,28 +16,39 @@ export class FriendService {
 		private userService: UserService
 	) {}
 
-	async sendFriendRequest(dto: RequestDto) {
-		const candidate = await this.friendRepository.findAll({
-			where: { friendId: dto.recipientId },
+	async sendFriendRequest(dto: RequestDto, req) {
+		const candidate = await this.friendRepository.findOne({
+			where: { friendId: dto.recipientId, userId: req.user.id },
 		})
 		if (candidate) {
 			throw new HttpException('Already friends', HttpStatus.BAD_REQUEST)
 		}
-		const sender = await this.userService.getUserById(dto.senderId)
+		//это для проверки
+		const sender = await this.userService.getUserById(req.user.id)
 		const recipient = await this.userService.getUserById(dto.recipientId)
-		const request = await this.friendRequestRepositoty.create(dto)
+
+		const requstPayload = { ...dto, senderId: req.user.id }
+		const request = await this.friendRequestRepositoty.create(requstPayload)
 		return request
 	}
 
-	async acceptFriendRequest(id: number) {
+	async acceptFriendRequest(id: number, req) {
 		const request: FriendRequest =
 			await this.friendRequestRepositoty.findByPk(id)
 		if (!request) {
 			throw new HttpException('No request with such id', HttpStatus.NOT_FOUND)
 		}
 
+		//для проверки
 		const sender = await this.userService.getUserById(request.senderId)
-		const recipiend = await this.userService.getUserById(request.recipientId)
+		const recipient = await this.userService.getUserById(request.recipientId)
+
+		if (recipient.id !== req.user.id) {
+			throw new HttpException(
+				'This friend request is not for this user',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 
 		const friend_relation1 = await this.friendRepository.create({
 			userId: request.senderId,
@@ -53,47 +64,60 @@ export class FriendService {
 		return { msg: 'friends created' }
 	}
 
-	async declineFriendRequest(id: number) {
-		const declined = await this.friendRequestRepositoty.destroy({
-			where: { id },
-		})
-		if (declined === 1) {
-			return { msg: 'declined' }
-		}
-		if (declined === 0) {
+	async declineFriendRequest(id: number, req) {
+		const request = await this.friendRequestRepositoty.findByPk(id)
+		if (!request) {
 			throw new HttpException('No request with such id', HttpStatus.NOT_FOUND)
 		}
+		if (request.recipientId !== req.user.id) {
+			throw new HttpException(
+				'This friend request is not for this user',
+				HttpStatus.BAD_REQUEST
+			)
+		}
+		try {
+			await request.destroy()
+		} catch (e) {
+			throw new HttpException('Not declined', HttpStatus.BAD_REQUEST)
+		}
+		return { msg: 'declined' }
 	}
 
-	async deleteFriend(id: number) {
-		const deletedFriend = await this.friendRepository.destroy({ where: { id } })
-		if (deletedFriend === 1) {
-			return { msg: 'friend deleted' }
-		}
-		if (deletedFriend === 0) {
-			throw new HttpException('No friend with such id', HttpStatus.NOT_FOUND)
+	async deleteFriend(id: number, req) {
+		try {
+			const deletedFriend = await this.friendRepository.destroy({
+				where: { friendId: id, userId: req.user.id },
+			})
+			if (deletedFriend === 1) {
+				return { msg: 'friend deleted' }
+			}
+			if (deletedFriend === 0) {
+				throw new HttpException('No friend with such id', HttpStatus.NOT_FOUND)
+			}
+		} catch (e) {
+			throw new HttpException('something went wrong', HttpStatus.BAD_GATEWAY)
 		}
 	}
 
-	async getSendedRequests(userId) {
+	async getSendedRequests(req) {
 		const user: User = await this.userRepository.findOne({
-			where: { id: userId },
+			where: { id: req.user.id },
 			include: { all: true },
 		})
 		return user.sended_friend_requests
 	}
 
-	async getReceivedRequests(userId) {
+	async getReceivedRequests(req) {
 		const user: User = await this.userRepository.findOne({
-			where: { id: userId },
+			where: { id: req.user.id },
 			include: { all: true },
 		})
 		return user.friend_requests
 	}
 
-	async getFriends(userId) {
+	async getFriends(req) {
 		const user: User = await this.userRepository.findOne({
-			where: { id: userId },
+			where: { id: req.user.id },
 			include: { all: true },
 		})
 		const friends = await this.userRepository.findAll({
