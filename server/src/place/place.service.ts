@@ -1,10 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
-import { Place, PlaceCreation } from './place.model'
+import { Place } from './place.model'
+import { PlaceCreationDto } from './dto/place.dto'
+import { UserService } from 'src/user/user.service'
 
 @Injectable()
 export class PlaceService {
-	constructor(@InjectModel(Place) private PlaceRepository: typeof Place) {}
+	constructor(
+		@InjectModel(Place) private PlaceRepository: typeof Place,
+		readonly userService: UserService
+	) {}
 
 	async getAllPlaces() {
 		const places = await this.PlaceRepository.findAll()
@@ -19,7 +24,7 @@ export class PlaceService {
 		throw new HttpException('no place with such id', HttpStatus.NOT_FOUND)
 	}
 
-	async createPlace(dto: PlaceCreation) {
+	async createPlace(dto: PlaceCreationDto, user) {
 		const existingPlace = await this.PlaceRepository.findOne({
 			where: { longtitude: dto.longtitude, width: dto.width },
 		})
@@ -29,30 +34,47 @@ export class PlaceService {
 				HttpStatus.BAD_REQUEST
 			)
 		}
-
-		const createdPLace = await this.PlaceRepository.create(dto)
-		if (createdPLace) {
-			return createdPLace
+		try {
+			const createdPlace = await this.PlaceRepository.create({
+				...dto,
+				userId: user.id,
+			})
+			return createdPlace
+		} catch (e) {
+			throw new HttpException('Something went wrong', HttpStatus.BAD_GATEWAY)
 		}
-		throw new HttpException('something went wrong', HttpStatus.BAD_REQUEST)
 	}
 
-	async updatePlace(dto, id) {
-		const place = await this.PlaceRepository.findByPk(id)
-		if (!place) {
-			throw new HttpException('no place with such id', HttpStatus.BAD_REQUEST)
+	async updatePlace(dto: PlaceCreationDto, placeId: number, user) {
+		const userPlaces: Place[] = (await this.userService.getUserById(user.id))
+			.created_places
+
+		if (!userPlaces.some(place => place.id == placeId)) {
+			throw new HttpException(
+				'This place is not for this user or place already deleted',
+				HttpStatus.BAD_REQUEST
+			)
 		}
-		await place.update({ ...place, ...dto })
-		await place.save()
-		return place
+
+		const updatedPlace = await this.getPlaceById(placeId).then(placeData =>
+			placeData.update({ ...placeData, ...dto })
+		)
+		return updatedPlace
 	}
 
-	async delete(id) {
-		const deleted = await this.PlaceRepository.destroy({ where: { id } })
-		if (deleted === 1) {
-			return { msg: 'successfully deleted' }
-		} else if (deleted === 0) {
-			throw new HttpException('No place with such id', HttpStatus.BAD_REQUEST)
+	async delete(placeId: number, user) {
+		const userPlaces: Place[] = (await this.userService.getUserById(user.id))
+			.created_places
+
+		if (!userPlaces.some(place => place.id == placeId)) {
+			throw new HttpException(
+				'This place is not for this user or place already deleted',
+				HttpStatus.BAD_REQUEST
+			)
 		}
+		await this.getPlaceById(placeId)
+			.then(place => place.destroy())
+			.catch(() => new HttpException('Not deleted', HttpStatus.BAD_GATEWAY))
+		return { msg: 'deleted' }
 	}
 }

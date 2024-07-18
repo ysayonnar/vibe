@@ -1,21 +1,23 @@
 import {
+	BelongsTo,
 	Column,
 	DataType,
 	ForeignKey,
 	Model,
 	Table,
 } from 'sequelize-typescript'
+import { User } from 'src/user/user.model'
 
-export interface PlaceCreation {
+export interface PlaceCreate {
 	longtitude: number
 	width: number
 	name: string
 	description: string
-	//userId: number -- foreign key
+	userId: number
 }
 
 @Table({ tableName: 'places' })
-export class Place extends Model<Place, PlaceCreation> {
+export class Place extends Model<Place, PlaceCreate> {
 	@Column({
 		type: DataType.INTEGER,
 		unique: true,
@@ -42,6 +44,10 @@ export class Place extends Model<Place, PlaceCreation> {
 	@Column({ type: DataType.FLOAT, defaultValue: 0 })
 	calculatedRating: number
 
-	// @Column({type: ForeignKey})
-	// userId: number`
+	@ForeignKey(() => User)
+	@Column({ type: DataType.INTEGER })
+	userId: number
+
+	@BelongsTo(() => User, 'userId')
+	user: User
 }

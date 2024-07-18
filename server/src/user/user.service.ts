@@ -50,7 +50,7 @@ export class UserService {
 	async getUserById(id: number) {
 		const user = await this.userRepository.findOne({
 			where: { id },
-			include: { model: Role, attributes: ['id', 'name', 'description'] },
+			include: { all: true },
 		})
 		if (!user) {
 			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
@@ -61,7 +61,7 @@ export class UserService {
 	async getUserByUsername(username: string) {
 		const user = await this.userRepository.findOne({
 			where: { username },
-			include: { model: Role, attributes: ['id', 'name', 'description'] },
+			include: { all: true },
 		})
 		if (!user) {
 			throw new HttpException(
@@ -75,7 +75,7 @@ export class UserService {
 	async getUserByEmail(email: string) {
 		const user = await this.userRepository.findOne({
 			where: { email },
-			include: { model: Role, attributes: ['id', 'name', 'description'] },
+			include: { all: true },
 		})
 		if (!user) {
 			throw new HttpException('No user with such email', HttpStatus.NOT_FOUND)

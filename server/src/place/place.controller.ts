@@ -1,6 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Post,
+	Put,
+	Req,
+	UseGuards,
+} from '@nestjs/common'
 import { PlaceService } from './place.service'
-import { PlaceCreation } from './place.model'
+
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { PlaceCreationDto } from './dto/place.dto'
 
 @Controller('place')
 export class PlaceController {
@@ -16,18 +28,25 @@ export class PlaceController {
 		return this.placeService.getPlaceById(id)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Post('/create')
-	async createPlace(@Body() placeDto: PlaceCreation) {
-		return this.placeService.createPlace(placeDto)
+	async createPlace(@Body() dto: PlaceCreationDto, @Req() req) {
+		return this.placeService.createPlace(dto, req.user)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Put('/update/:id')
-	async changePlace(@Body() placeDto: PlaceCreation, @Param('id') id: number) {
-		return this.placeService.updatePlace(placeDto, id)
+	async changePlace(
+		@Body() dto: PlaceCreationDto,
+		@Param('id') id: number,
+		@Req() req
+	) {
+		return this.placeService.updatePlace(dto, id, req.user)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Delete('/delete/:id')
-	async deletePlace(@Param('id') id: number) {
-		return this.placeService.delete(id)
+	async deletePlace(@Param('id') id: number, @Req() req) {
+		return this.placeService.delete(id, req.user)
 	}
 }

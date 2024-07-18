@@ -20,8 +20,6 @@ import { RolesGuard } from 'src/auth/roles.guard'
 export class UserController {
 	constructor(readonly userService: UserService) {}
 
-	@Roles('ADMIN')
-	@UseGuards(RolesGuard)
 	@Get()
 	async getAllUsers() {
 		return this.userService.getAllUsers()
