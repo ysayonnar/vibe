@@ -89,7 +89,6 @@ export class UserService {
 		return createdUser
 	}
 
-	//тут остановился
 	async giveRole(dto: GiveRoleDto) {
 		const user: User = await this.getUserById(dto.userId)
 		const role = await this.roleService.getRoleByName(dto.roleName)
@@ -129,15 +128,21 @@ export class UserService {
 		return user
 	}
 
-	async edtiBio(dto: EditBioDto, req) {
-		const user: User = await this.getUserById(req.user.id)
-		user.bio = dto.bio
-		await user.save()
+	async edtiBio(dto: EditBioDto, jwtUser) {
+		// const user: User = await this.getUserById(req.user.id)
+		// user.bio = dto.bio
+		// await user.save()
+		// return user
+
+		const user: User = await this.getUserById(jwtUser.id).then(user => {
+			user.bio = dto.bio
+			user.save()
+			return user
+		})
 		return user
 	}
 
-	async editTguser(dto: EditTguserDto, req) {
-		const user: User = await this.getUserById(req.user.id)
+	async editTguser(dto: EditTguserDto, jwtUser) {
 		if (dto.telegram_username[0] !== '@') {
 			throw new HttpException(
 				'Incorrect telegram username',
@@ -153,8 +158,11 @@ export class UserService {
 				HttpStatus.BAD_REQUEST
 			)
 		}
-		user.telegram_username = dto.telegram_username
-		await user.save()
+		const user: User = await this.getUserById(jwtUser.id).then(user => {
+			user.telegram_username = dto.telegram_username
+			user.save()
+			return user
+		})
 		return user
 	}
 }

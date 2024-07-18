@@ -75,13 +75,13 @@ export class UserController {
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/bio')
-	async editBio(@Body() dto: EditBioDto, @Req() req: Request) {
-		return this.userService.edtiBio(dto, req)
+	async editBio(@Body() dto: EditBioDto, @Req() req) {
+		return this.userService.edtiBio(dto, req.user)
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/tg')
-	async editTguser(@Body() dto: EditTguserDto, @Req() req: Request) {
-		return this.userService.editTguser(dto, req)
+	async editTguser(@Body() dto: EditTguserDto, @Req() req) {
+		return this.userService.editTguser(dto, req.user)
 	}
 }
