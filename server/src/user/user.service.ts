@@ -16,14 +16,6 @@ export class UserService {
 		private roleService: RolesService
 	) {}
 
-	// private async findUser(id: number) {
-	// 	const user: User = await this.userRepository.findByPk(id)
-	// 	if (!user) {
-	// 		throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
-	// 	}
-	// 	return user
-	// }
-
 	async checkEmailUsername(dto: UserCreationDto) {
 		const candidateByEmail = await this.userRepository.findOne({
 			where: { email: dto.email },
@@ -86,13 +78,18 @@ export class UserService {
 	async createUser(dto: UserCreationDto) {
 		await this.checkEmailUsername(dto)
 		const role = await this.roleService.getRoleByName('USER')
-		const user = await this.userRepository.create(dto)
-		await user.$set('roles', [role.id])
-		user.roles = [role]
-		await user.save()
-		return user
+		const createdUser = await this.userRepository
+			.create(dto)
+			.then(async user => {
+				await user.$set('roles', [role.id])
+				user.roles = [role]
+				return user
+			})
+			.then(user => user.save())
+		return createdUser
 	}
 
+	//тут остановился
 	async giveRole(dto: GiveRoleDto) {
 		const user: User = await this.getUserById(dto.userId)
 		const role = await this.roleService.getRoleByName(dto.roleName)
