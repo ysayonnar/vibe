@@ -16,23 +16,23 @@ export class FriendService {
 		private userService: UserService
 	) {}
 
-	async sendFriendRequest(dto: RequestDto, req) {
+	async sendFriendRequest(dto: RequestDto, user) {
 		const candidate = await this.friendRepository.findOne({
-			where: { friendId: dto.recipientId, userId: req.user.id },
+			where: { friendId: dto.recipientId, userId: user.id },
 		})
 		if (candidate) {
 			throw new HttpException('Already friends', HttpStatus.BAD_REQUEST)
 		}
 		//это для проверки
-		const sender = await this.userService.getUserById(req.user.id)
+		const sender = await this.userService.getUserById(user.id)
 		const recipient = await this.userService.getUserById(dto.recipientId)
 
-		const requstPayload = { ...dto, senderId: req.user.id }
+		const requstPayload = { ...dto, senderId: user.id }
 		const request = await this.friendRequestRepositoty.create(requstPayload)
 		return request
 	}
 
-	async acceptFriendRequest(id: number, req) {
+	async acceptFriendRequest(id: number, user) {
 		const request: FriendRequest =
 			await this.friendRequestRepositoty.findByPk(id)
 		if (!request) {
@@ -43,7 +43,7 @@ export class FriendService {
 		const sender = await this.userService.getUserById(request.senderId)
 		const recipient = await this.userService.getUserById(request.recipientId)
 
-		if (recipient.id !== req.user.id) {
+		if (recipient.id !== user.id) {
 			throw new HttpException(
 				'This friend request is not for this user',
 				HttpStatus.BAD_REQUEST
@@ -64,12 +64,12 @@ export class FriendService {
 		return { msg: 'friends created' }
 	}
 
-	async declineFriendRequest(id: number, req) {
+	async declineFriendRequest(id: number, user) {
 		const request = await this.friendRequestRepositoty.findByPk(id)
 		if (!request) {
 			throw new HttpException('No request with such id', HttpStatus.NOT_FOUND)
 		}
-		if (request.recipientId !== req.user.id) {
+		if (request.recipientId !== user.id) {
 			throw new HttpException(
 				'This friend request is not for this user',
 				HttpStatus.BAD_REQUEST
@@ -83,10 +83,10 @@ export class FriendService {
 		return { msg: 'declined' }
 	}
 
-	async deleteFriend(id: number, req) {
+	async deleteFriend(id: number, user) {
 		try {
 			const deletedFriend = await this.friendRepository.destroy({
-				where: { friendId: id, userId: req.user.id },
+				where: { friendId: id, userId: user.id },
 			})
 			if (deletedFriend === 1) {
 				return { msg: 'friend deleted' }
@@ -99,25 +99,25 @@ export class FriendService {
 		}
 	}
 
-	async getSendedRequests(req) {
-		const user: User = await this.userRepository.findOne({
-			where: { id: req.user.id },
+	async getSendedRequests(user) {
+		const foundedUser: User = await this.userRepository.findOne({
+			where: { id: user.id },
 			include: { all: true },
 		})
-		return user.sended_friend_requests
+		return foundedUser.sended_friend_requests
 	}
 
-	async getReceivedRequests(req) {
-		const user: User = await this.userRepository.findOne({
-			where: { id: req.user.id },
+	async getReceivedRequests(user) {
+		const foundedUser: User = await this.userRepository.findOne({
+			where: { id: user.id },
 			include: { all: true },
 		})
-		return user.friend_requests
+		return foundedUser.friend_requests
 	}
 
-	async getFriends(req) {
-		const user: User = await this.userRepository.findOne({
-			where: { id: req.user.id },
+	async getFriends(user) {
+		const foundedUser: User = await this.userRepository.findOne({
+			where: { id: user.id },
 			include: { all: true },
 		})
 		const friends = await this.userRepository.findAll({
