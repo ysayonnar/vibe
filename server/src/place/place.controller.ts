@@ -49,4 +49,9 @@ export class PlaceController {
 	async deletePlace(@Param('id') id: number, @Req() req) {
 		return this.placeService.delete(id, req.user)
 	}
+
+	@Get('/find/:searchQuery')
+	async findPlaceByName(@Param('searchQuery') search: string) {
+		return this.placeService.findPlaceByName(search)
+	}
 }

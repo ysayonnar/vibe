@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize'
 import { Place } from './place.model'
 import { PlaceCreationDto } from './dto/place.dto'
 import { UserService } from 'src/user/user.service'
+import sequelize from 'sequelize'
 
 @Injectable()
 export class PlaceService {
@@ -76,5 +77,25 @@ export class PlaceService {
 			.then(place => place.destroy())
 			.catch(() => new HttpException('Not deleted', HttpStatus.BAD_GATEWAY))
 		return { msg: 'deleted' }
+	}
+
+	async findPlaceByName(searchQuery: string) {
+		const places: Place[] = await this.PlaceRepository.findAll()
+		const foundedPlaces: Place[] = []
+
+		for (let i = 0; i < places.length; i++) {
+			const place: Place = places[i]
+			const check = place.name
+				.toLowerCase()
+				.startsWith(searchQuery.toLowerCase())
+			if (check) {
+				foundedPlaces.push(place)
+			}
+		}
+
+		if (foundedPlaces.length === 0) {
+			return { msg: 'Nothing found.' }
+		}
+		return foundedPlaces
 	}
 }
