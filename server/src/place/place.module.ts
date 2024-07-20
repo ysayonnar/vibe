@@ -11,5 +11,6 @@ import { UserModule } from 'src/user/user.module'
 	providers: [PlaceService],
 	controllers: [PlaceController],
 	imports: [SequelizeModule.forFeature([Place]), AuthModule, UserModule],
+	exports: [PlaceService],
 })
 export class PlaceModule {}

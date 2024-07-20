@@ -13,6 +13,8 @@ import { JwtModule } from '@nestjs/jwt'
 import { FriendModule } from './friend/friend.module'
 import { Friend } from './friend/friend.model'
 import { FriendRequest } from './friend/friend_request.model'
+import { ReviewModule } from './review/review.module'
+import { Review } from './review/review.model'
 
 @Module({
 	imports: [
@@ -28,13 +30,14 @@ import { FriendRequest } from './friend/friend_request.model'
 			username: process.env.DATABASE_USERNAME,
 			password: process.env.DATABASE_PASSWORD,
 			database: process.env.DATABASE_NAME,
-			models: [Place, Role, User, UserRoles, Friend, FriendRequest],
+			models: [Place, Role, User, UserRoles, Friend, FriendRequest, Review],
 			autoLoadModels: true,
 		}),
 		RolesModule,
 		UserModule,
 		AuthModule,
 		FriendModule,
+		ReviewModule,
 	],
 	controllers: [],
 	providers: [],

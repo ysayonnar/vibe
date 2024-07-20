@@ -13,12 +13,16 @@ export class PlaceService {
 	) {}
 
 	async getAllPlaces() {
-		const places = await this.PlaceRepository.findAll()
+		const places = await this.PlaceRepository.findAll({
+			include: { all: true },
+		})
 		return places
 	}
 
 	async getPlaceById(id: number) {
-		const place = await this.PlaceRepository.findByPk(id)
+		const place = await this.PlaceRepository.findByPk(id, {
+			include: { all: true },
+		})
 		if (place) {
 			return place
 		}

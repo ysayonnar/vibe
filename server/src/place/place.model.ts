@@ -3,9 +3,11 @@ import {
 	Column,
 	DataType,
 	ForeignKey,
+	HasMany,
 	Model,
 	Table,
 } from 'sequelize-typescript'
+import { Review } from 'src/review/review.model'
 import { User } from 'src/user/user.model'
 
 export interface PlaceCreate {
@@ -50,4 +52,7 @@ export class Place extends Model<Place, PlaceCreate> {
 
 	@BelongsTo(() => User, 'userId')
 	user: User
+
+	@HasMany(() => Review, 'placeId')
+	reviews: Review[]
 }

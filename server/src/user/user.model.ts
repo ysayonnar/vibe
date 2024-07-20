@@ -9,6 +9,7 @@ import {
 import { Friend } from 'src/friend/friend.model'
 import { FriendRequest } from 'src/friend/friend_request.model'
 import { Place } from 'src/place/place.model'
+import { Review } from 'src/review/review.model'
 import { Role } from 'src/roles/roles.model'
 import { UserRoles } from 'src/roles/user-roles.model'
 
@@ -70,4 +71,7 @@ export class User extends Model<User, UserCreationInterface> {
 
 	@HasMany(() => Place, 'userId')
 	created_places: Place[]
+
+	@HasMany(() => Review, 'userId')
+	created_reviews: Review[]
 }
