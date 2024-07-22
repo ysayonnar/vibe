@@ -15,6 +15,9 @@ import { Friend } from './friend/friend.model'
 import { FriendRequest } from './friend/friend_request.model'
 import { ReviewModule } from './review/review.module'
 import { Review } from './review/review.model'
+import { FilesModule } from './files/files.module'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import * as path from 'path'
 
 @Module({
 	imports: [
@@ -38,6 +41,10 @@ import { Review } from './review/review.model'
 		AuthModule,
 		FriendModule,
 		ReviewModule,
+		FilesModule,
+		ServeStaticModule.forRoot({
+			rootPath: path.resolve(__dirname, 'static'),
+		}),
 	],
 	controllers: [],
 	providers: [],

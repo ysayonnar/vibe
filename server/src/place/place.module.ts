@@ -6,11 +6,17 @@ import { SequelizeModule } from '@nestjs/sequelize'
 import { Place } from './place.model'
 import { AuthModule } from 'src/auth/auth.module'
 import { UserModule } from 'src/user/user.module'
+import { FilesModule } from 'src/files/files.module'
 
 @Module({
 	providers: [PlaceService],
 	controllers: [PlaceController],
-	imports: [SequelizeModule.forFeature([Place]), AuthModule, UserModule],
+	imports: [
+		SequelizeModule.forFeature([Place]),
+		AuthModule,
+		UserModule,
+		FilesModule,
+	],
 	exports: [PlaceService],
 })
 export class PlaceModule {}

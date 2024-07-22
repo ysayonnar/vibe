@@ -16,6 +16,7 @@ export interface PlaceCreate {
 	name: string
 	description: string
 	userId: number
+	image: string
 }
 
 @Table({ tableName: 'places' })
@@ -40,8 +41,8 @@ export class Place extends Model<Place, PlaceCreate> {
 	@Column({ type: DataType.STRING(1000), unique: false, allowNull: true })
 	description: string
 
-	// @Column({ type: DataType.NUMBER })
-	// photos: boolean
+	@Column({ type: DataType.STRING(1000) })
+	image: string
 
 	@Column({ type: DataType.FLOAT, defaultValue: 0 })
 	calculatedRating: number

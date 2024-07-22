@@ -3,13 +3,15 @@ import { InjectModel } from '@nestjs/sequelize'
 import { Place } from './place.model'
 import { PlaceCreationDto } from './dto/place.dto'
 import { UserService } from 'src/user/user.service'
-import sequelize from 'sequelize'
+import { FilesService } from 'src/files/files.service'
+import * as path from 'path'
 
 @Injectable()
 export class PlaceService {
 	constructor(
 		@InjectModel(Place) private PlaceRepository: typeof Place,
-		readonly userService: UserService
+		readonly userService: UserService,
+		readonly filesService: FilesService
 	) {}
 
 	async getAllPlaces() {
@@ -29,7 +31,7 @@ export class PlaceService {
 		throw new HttpException('no place with such id', HttpStatus.NOT_FOUND)
 	}
 
-	async createPlace(dto: PlaceCreationDto, user) {
+	async createPlace(dto: PlaceCreationDto, user, image) {
 		const existingPlace = await this.PlaceRepository.findOne({
 			where: { longtitude: dto.longtitude, width: dto.width },
 		})
@@ -40,9 +42,11 @@ export class PlaceService {
 			)
 		}
 		try {
+			const fileName = await this.filesService.createFile(image)
 			const createdPlace = await this.PlaceRepository.create({
 				...dto,
 				userId: user.id,
+				image: fileName,
 			})
 			return createdPlace
 		} catch (e) {
@@ -67,6 +71,36 @@ export class PlaceService {
 		return updatedPlace
 	}
 
+	async changePhoto(user, file, placeId) {
+		const place = await this.getPlaceById(placeId)
+		if (place.userId != user.id) {
+			throw new HttpException(
+				'This place is not for this user',
+				HttpStatus.FORBIDDEN
+			)
+		}
+		if (place.image.length == 0) {
+			const fileName = await this.filesService.createFile(file)
+			await place.update({ ...place, image: fileName })
+		} else {
+			await this.filesService.rewriteFile(file, place.image)
+		}
+		return place
+	}
+
+	async deletePhoto(placeId: number, user) {
+		const place = await this.getPlaceById(placeId)
+		if (place.userId != user.id) {
+			throw new HttpException(
+				'This place is not for this user',
+				HttpStatus.FORBIDDEN
+			)
+		}
+		await this.filesService.deletePhoto(place.image)
+		await place.update({ ...place, image: '' })
+		return { msg: 'deleted' }
+	}
+
 	async delete(placeId: number, user) {
 		const userPlaces: Place[] = (await this.userService.getUserById(user.id))
 			.created_places
@@ -78,7 +112,10 @@ export class PlaceService {
 			)
 		}
 		await this.getPlaceById(placeId)
-			.then(place => place.destroy())
+			.then(place => {
+				this.filesService.deletePhoto(place.image)
+				place.destroy()
+			})
 			.catch(() => new HttpException('Not deleted', HttpStatus.BAD_GATEWAY))
 		return { msg: 'deleted' }
 	}
@@ -86,7 +123,6 @@ export class PlaceService {
 	async findPlaceByName(searchQuery: string) {
 		const places: Place[] = await this.PlaceRepository.findAll()
 		const foundedPlaces: Place[] = []
-
 		for (let i = 0; i < places.length; i++) {
 			const place: Place = places[i]
 			const check = place.name

@@ -7,12 +7,15 @@ import {
 	Post,
 	Put,
 	Req,
+	UploadedFile,
 	UseGuards,
+	UseInterceptors,
 } from '@nestjs/common'
 import { PlaceService } from './place.service'
 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { PlaceCreationDto } from './dto/place.dto'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 @Controller('place')
 export class PlaceController {
@@ -29,9 +32,14 @@ export class PlaceController {
 	}
 
 	@UseGuards(JwtAuthGuard)
+	@UseInterceptors(FileInterceptor('image'))
 	@Post('/create')
-	async createPlace(@Body() dto: PlaceCreationDto, @Req() req) {
-		return this.placeService.createPlace(dto, req.user)
+	async createPlace(
+		@Body() dto: PlaceCreationDto,
+		@Req() req,
+		@UploadedFile() image
+	) {
+		return this.placeService.createPlace(dto, req.user, image)
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -42,6 +50,23 @@ export class PlaceController {
 		@Req() req
 	) {
 		return this.placeService.updatePlace(dto, id, req.user)
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@UseInterceptors(FileInterceptor('image'))
+	@Put('/photo/:id')
+	async changePhoto(
+		@Param('id') id: number,
+		@Req() req,
+		@UploadedFile() image
+	) {
+		return this.placeService.changePhoto(req.user, image, id)
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Delete('/photo/:id')
+	async deletePhoto(@Param('id') id: number, @Req() req) {
+		return this.placeService.deletePhoto(id, req.user)
 	}
 
 	@UseGuards(JwtAuthGuard)
