@@ -17,7 +17,6 @@ export class ReviewService {
 		const place: Place = await this.placeService
 			.getPlaceById(placeId)
 			.then(place => {
-				console.log(place)
 				let calculatedRating = 0
 				for (let i = 0; i < place.reviews.length; i++) {
 					calculatedRating += place.reviews[i].grade
