@@ -1,5 +1,6 @@
 import {
 	BelongsTo,
+	BelongsToMany,
 	Column,
 	DataType,
 	ForeignKey,
@@ -7,6 +8,8 @@ import {
 	Model,
 	Table,
 } from 'sequelize-typescript'
+import { PlaceCategory } from 'src/category/category-place.model'
+import { Category } from 'src/category/category.model'
 import { Review } from 'src/review/review.model'
 import { User } from 'src/user/user.model'
 
@@ -56,4 +59,7 @@ export class Place extends Model<Place, PlaceCreate> {
 
 	@HasMany(() => Review, 'placeId')
 	reviews: Review[]
+
+	@BelongsToMany(() => Category, () => PlaceCategory)
+	categories: Category[]
 }

@@ -16,8 +16,10 @@ import { ReviewModule } from './review/review.module'
 import { Review } from './review/review.model'
 import { FilesModule } from './files/files.module'
 import { ServeStaticModule } from '@nestjs/serve-static'
-import { CategoryModule } from './category/category.module';
+import { CategoryModule } from './category/category.module'
 import * as path from 'path'
+import { Category } from './category/category.model'
+import { PlaceCategory } from './category/category-place.model'
 
 @Module({
 	imports: [
@@ -33,7 +35,17 @@ import * as path from 'path'
 			username: process.env.DATABASE_USERNAME,
 			password: process.env.DATABASE_PASSWORD,
 			database: process.env.DATABASE_NAME,
-			models: [Place, Role, User, UserRoles, Friend, FriendRequest, Review],
+			models: [
+				Place,
+				Role,
+				User,
+				UserRoles,
+				Friend,
+				FriendRequest,
+				Review,
+				Category,
+				PlaceCategory,
+			],
 			autoLoadModels: true,
 		}),
 		RolesModule,
