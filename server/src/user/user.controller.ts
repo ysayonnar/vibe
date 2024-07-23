@@ -45,11 +45,6 @@ export class UserController {
 		return this.userService.getUserByEmail(email)
 	}
 
-	// @Post('/create')
-	// async createUser(@Body() dto: UserCreationDto) {
-	// 	return this.userService.createUser(dto)
-	// }
-
 	@Roles('ADMIN')
 	@UseGuards(RolesGuard)
 	@Post('/give_role')

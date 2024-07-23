@@ -3,7 +3,6 @@ import { User } from './user.model'
 import { UserCreationDto } from './dto/user-creation.dto'
 import { InjectModel } from '@nestjs/sequelize'
 import { RolesService } from 'src/roles/roles.service'
-import { Role } from 'src/roles/roles.model'
 import { GiveRoleDto } from './dto/giveRole.dto'
 import { BanUserDto } from './dto/banUser.dto'
 import { EditBioDto } from './dto/editBio.dto'
@@ -131,11 +130,6 @@ export class UserService {
 	}
 
 	async edtiBio(dto: EditBioDto, jwtUser) {
-		// const user: User = await this.getUserById(req.user.id)
-		// user.bio = dto.bio
-		// await user.save()
-		// return user
-
 		const user: User = await this.getUserById(jwtUser.id).then(user => {
 			user.bio = dto.bio
 			user.save()

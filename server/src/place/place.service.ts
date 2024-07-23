@@ -4,7 +4,6 @@ import { Place } from './place.model'
 import { PlaceCreationDto } from './dto/place.dto'
 import { UserService } from 'src/user/user.service'
 import { FilesService } from 'src/files/files.service'
-import * as path from 'path'
 
 @Injectable()
 export class PlaceService {

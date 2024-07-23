@@ -9,7 +9,6 @@ import { UserModule } from './user/user.module'
 import { User } from './user/user.model'
 import { UserRoles } from './roles/user-roles.model'
 import { AuthModule } from './auth/auth.module'
-import { JwtModule } from '@nestjs/jwt'
 import { FriendModule } from './friend/friend.module'
 import { Friend } from './friend/friend.model'
 import { FriendRequest } from './friend/friend_request.model'
@@ -17,6 +16,7 @@ import { ReviewModule } from './review/review.module'
 import { Review } from './review/review.model'
 import { FilesModule } from './files/files.module'
 import { ServeStaticModule } from '@nestjs/serve-static'
+import { CategoryModule } from './category/category.module';
 import * as path from 'path'
 
 @Module({
@@ -45,6 +45,7 @@ import * as path from 'path'
 		ServeStaticModule.forRoot({
 			rootPath: path.resolve(__dirname, 'static'),
 		}),
+		CategoryModule,
 	],
 	controllers: [],
 	providers: [],
