@@ -96,6 +96,9 @@ export class PlaceService {
 				HttpStatus.FORBIDDEN
 			)
 		}
+		if (place.image.length == 0) {
+			throw new HttpException('No photo for this place', HttpStatus.BAD_REQUEST)
+		}
 		await this.filesService.deletePhoto(place.image)
 		await place.update({ ...place, image: '' })
 		return { msg: 'deleted' }

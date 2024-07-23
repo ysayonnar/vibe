@@ -45,8 +45,8 @@ export class User extends Model<User, UserCreationInterface> {
 	})
 	bio: string
 
-	// @Column({ type: DataType.STRING, unique: false, allowNull: false })
-	// avatar: string
+	@Column({ type: DataType.STRING(1000), defaultValue: '' })
+	avatar: string
 
 	@Column({ type: DataType.BOOLEAN, defaultValue: false })
 	isBanned: boolean

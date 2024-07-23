@@ -1,11 +1,15 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	Param,
 	Post,
+	Put,
 	Req,
+	UploadedFile,
 	UseGuards,
+	UseInterceptors,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { GiveRoleDto } from './dto/giveRole.dto'
@@ -15,6 +19,7 @@ import { EditTguserDto } from './dto/editTguser.dto'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
+import { FileInterceptor } from '@nestjs/platform-express'
 
 @Controller('user')
 export class UserController {
@@ -83,5 +88,18 @@ export class UserController {
 	@Post('/tg')
 	async editTguser(@Body() dto: EditTguserDto, @Req() req) {
 		return this.userService.editTguser(dto, req.user)
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@UseInterceptors(FileInterceptor('image'))
+	@Put('/avatar')
+	async changeAvatar(@Req() req, @UploadedFile() image) {
+		return this.userService.changeAvatar(image, req.user)
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Delete('/avatar')
+	async deleteAvatar(@Req() req) {
+		return this.userService.deleteAvatar(req.user)
 	}
 }

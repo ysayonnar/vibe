@@ -9,6 +9,8 @@ import { RolesModule } from 'src/roles/roles.module'
 import { Friend } from 'src/friend/friend.model'
 import { FriendRequest } from 'src/friend/friend_request.model'
 import { AuthModule } from 'src/auth/auth.module'
+import { FilesService } from 'src/files/files.service'
+import { FilesModule } from 'src/files/files.module'
 
 @Module({
 	controllers: [UserController],
@@ -17,6 +19,7 @@ import { AuthModule } from 'src/auth/auth.module'
 		SequelizeModule.forFeature([User, Role, UserRoles, Friend, FriendRequest]),
 		forwardRef(() => RolesModule),
 		forwardRef(() => AuthModule),
+		FilesModule,
 	],
 	exports: [UserService],
 })

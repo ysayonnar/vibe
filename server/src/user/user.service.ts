@@ -8,12 +8,14 @@ import { GiveRoleDto } from './dto/giveRole.dto'
 import { BanUserDto } from './dto/banUser.dto'
 import { EditBioDto } from './dto/editBio.dto'
 import { EditTguserDto } from './dto/editTguser.dto'
+import { FilesService } from 'src/files/files.service'
 
 @Injectable()
 export class UserService {
 	constructor(
 		@InjectModel(User) private userRepository: typeof User,
-		private roleService: RolesService
+		readonly roleService: RolesService,
+		readonly filesService: FilesService
 	) {}
 
 	async checkEmailUsername(dto: UserCreationDto) {
@@ -164,5 +166,26 @@ export class UserService {
 			return user
 		})
 		return user
+	}
+
+	async changeAvatar(file, jwtUser) {
+		const user: User = await this.getUserById(jwtUser.id)
+		if (user.avatar.length == 0) {
+			const fileName = await this.filesService.createFile(file)
+			await user.update({ ...user, avatar: fileName })
+		} else {
+			await this.filesService.rewriteFile(file, user.avatar)
+		}
+		return user
+	}
+
+	async deleteAvatar(jwtUser) {
+		const user: User = await this.getUserById(jwtUser.id)
+		if (user.avatar.length == 0) {
+			throw new HttpException('No avatar for this user', HttpStatus.BAD_REQUEST)
+		}
+		await this.filesService.deletePhoto(user.avatar)
+		await user.update({ ...user, avatar: '' })
+		return { msg: 'deleted' }
 	}
 }
