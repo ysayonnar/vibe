@@ -4,13 +4,15 @@ import { Place } from './place.model'
 import { PlaceCreationDto } from './dto/place.dto'
 import { UserService } from 'src/user/user.service'
 import { FilesService } from 'src/files/files.service'
+import { CategoryService } from 'src/category/category.service'
 
 @Injectable()
 export class PlaceService {
 	constructor(
 		@InjectModel(Place) private PlaceRepository: typeof Place,
 		readonly userService: UserService,
-		readonly filesService: FilesService
+		readonly filesService: FilesService,
+		readonly categoryService: CategoryService
 	) {}
 
 	async getAllPlaces() {
@@ -139,5 +141,48 @@ export class PlaceService {
 			return { msg: 'Nothing found.' }
 		}
 		return foundedPlaces
+	}
+
+	async filterByCategories(categoriesId: number[]) {
+		const places = await this.getAllPlaces()
+		return places.filter(place => {
+			const placeCategoryIds = place.categories.map(category => category.id)
+			return categoriesId.every(id => placeCategoryIds.includes(id))
+		})
+	}
+
+	async setCategories(placeId, categoriesId, user) {
+		const place = await this.getPlaceById(placeId)
+		if (place.userId != user.id) {
+			throw new HttpException(
+				'This place is not for this user',
+				HttpStatus.FORBIDDEN
+			)
+		}
+		try {
+			await Promise.all(
+				categoriesId.map(
+					async id => await this.categoryService.getCategoryById(id)
+				)
+			)
+		} catch (e) {
+			if (e instanceof HttpException) {
+				throw e
+			}
+			throw new HttpException(
+				'No category with one of the id',
+				HttpStatus.NOT_FOUND
+			)
+		}
+		await place.$set('categories', categoriesId)
+		const categories = await Promise.all(
+			categoriesId.map(
+				async id => await this.categoryService.getCategoryById(id)
+			)
+		)
+		place.categories = categories
+		await place.save()
+		const saved = await this.getPlaceById(placeId)
+		return saved
 	}
 }

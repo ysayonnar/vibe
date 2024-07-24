@@ -26,7 +26,7 @@ export class PlaceController {
 		return this.placeService.getAllPlaces()
 	}
 
-	@Get('/:id')
+	@Get('/byid/:id')
 	async getPlaceById(@Param('id') id: number) {
 		return this.placeService.getPlaceById(id)
 	}
@@ -78,5 +78,21 @@ export class PlaceController {
 	@Get('/find/:searchQuery')
 	async findPlaceByName(@Param('searchQuery') search: string) {
 		return this.placeService.findPlaceByName(search)
+	}
+
+	@Get('/filter')
+	async filterByCategories(@Body() categoriesId: number[]) {
+		return this.placeService.filterByCategories(categoriesId)
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Put('/setCategories/:id')
+	async setCategories(
+		@Param('id') id: number,
+		@Body() categoriesId: number[],
+		@Req() req
+	) {
+		console.log('adad')
+		return this.placeService.setCategories(id, categoriesId, req.user)
 	}
 }
