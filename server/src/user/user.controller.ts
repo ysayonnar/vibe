@@ -10,6 +10,8 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { GiveRoleDto } from './dto/giveRole.dto'
@@ -20,6 +22,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { number } from 'zod'
 
 @Controller('user')
 export class UserController {
@@ -45,25 +48,28 @@ export class UserController {
 		return this.userService.getUserByEmail(email)
 	}
 
+	@UsePipes(ValidationPipe)
 	@Roles('ADMIN')
 	@UseGuards(RolesGuard)
-	@Post('/give_role')
-	async giveRole(@Body() dto: GiveRoleDto) {
-		return this.userService.giveRole(dto)
+	@Post('/give_role/:id')
+	async giveRole(@Body() dto: GiveRoleDto, @Param('id') id: number) {
+		return this.userService.giveRole(id, dto)
 	}
 
+	@UsePipes(ValidationPipe)
 	@Roles('ADMIN')
 	@UseGuards(RolesGuard)
-	@Post('/remove_role')
-	async removeRole(@Body() dto: GiveRoleDto) {
-		return this.userService.removeRole(dto)
+	@Post('/remove_role/:id')
+	async removeRole(@Body() dto: GiveRoleDto, @Param('id') id: number) {
+		return this.userService.removeRole(id, dto)
 	}
 
+	@UsePipes(ValidationPipe)
 	@Roles('ADMIN')
 	@UseGuards(RolesGuard)
-	@Post('/ban')
-	async banUser(@Body() dto: BanUserDto) {
-		return this.userService.banUser(dto)
+	@Post('/ban/:id')
+	async banUser(@Param('id') id: number, @Body() dto: BanUserDto) {
+		return this.userService.banUser(id, dto)
 	}
 
 	@Roles('ADMIN')
@@ -73,12 +79,14 @@ export class UserController {
 		return this.userService.unbanUser(id)
 	}
 
+	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
 	@Post('/bio')
 	async editBio(@Body() dto: EditBioDto, @Req() req) {
 		return this.userService.edtiBio(dto, req.user)
 	}
 
+	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
 	@Post('/tg')
 	async editTguser(@Body() dto: EditTguserDto, @Req() req) {

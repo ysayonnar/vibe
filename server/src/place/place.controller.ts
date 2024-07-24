@@ -10,6 +10,8 @@ import {
 	UploadedFile,
 	UseGuards,
 	UseInterceptors,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common'
 import { PlaceService } from './place.service'
 
@@ -31,6 +33,7 @@ export class PlaceController {
 		return this.placeService.getPlaceById(id)
 	}
 
+	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
 	@UseInterceptors(FileInterceptor('image'))
 	@Post('/create')
@@ -42,6 +45,7 @@ export class PlaceController {
 		return this.placeService.createPlace(dto, req.user, image)
 	}
 
+	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
 	@Put('/update/:id')
 	async changePlace(

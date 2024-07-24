@@ -8,11 +8,12 @@ import {
 	Put,
 	Req,
 	UseGuards,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common'
 import { ReviewService } from './review.service'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { ReviewCreationDto } from './dto/review.dto'
-import { ReviewUpdateDto } from './dto/reviewUpdate.dto'
 
 @Controller('review')
 export class ReviewController {
@@ -28,16 +29,26 @@ export class ReviewController {
 		return this.reviewService.getReviewById(id)
 	}
 
+	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
-	@Post('/create')
-	async createReview(@Body() dto: ReviewCreationDto, @Req() req) {
-		return this.reviewService.createReview(dto, req.user)
+	@Post('/create/:id')
+	async createReview(
+		@Param('id') id: number,
+		@Body() dto: ReviewCreationDto,
+		@Req() req
+	) {
+		return this.reviewService.createReview(id, dto, req.user)
 	}
 
+	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
-	@Put('/update')
-	async updateReview(@Body() dto: ReviewUpdateDto, @Req() req) {
-		return this.reviewService.updateReview(dto, req.user)
+	@Put('/update/:id')
+	async updateReview(
+		@Param('id') id: number,
+		@Body() dto: ReviewCreationDto,
+		@Req() req
+	) {
+		return this.reviewService.updateReview(id, dto, req.user)
 	}
 
 	@UseGuards(JwtAuthGuard)

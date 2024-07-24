@@ -13,20 +13,6 @@ export class AuthService {
 		private userService: UserService
 	) {}
 
-	validateEmail(email: string) {
-		const atIndex: number = email.indexOf('@')
-		const dotIndex: number = email.lastIndexOf('.')
-
-		return atIndex > 0 && dotIndex > atIndex + 1 && dotIndex < email.length - 1
-	}
-
-	validateUsername(username: string) {
-		if (username.length > 3 && username.length < 20) {
-			return true
-		}
-		return false
-	}
-
 	private async generateToken(user: User) {
 		const payload = {
 			id: user.id,
@@ -52,15 +38,6 @@ export class AuthService {
 	}
 
 	async registration(dto: UserCreationDto) {
-		if (!this.validateEmail(dto.email)) {
-			throw new HttpException('Email is incorrect', HttpStatus.BAD_REQUEST)
-		}
-		if (!this.validateUsername(dto.username)) {
-			throw new HttpException(
-				'Username must be from 3 to 20 symbols',
-				HttpStatus.BAD_REQUEST
-			)
-		}
 		const hash = await bcrypt.hash(dto.password_hash, 5)
 		const user = await this.userService.createUser({
 			...dto,
@@ -70,9 +47,6 @@ export class AuthService {
 	}
 
 	async login(dto: loginDto) {
-		if (!this.validateEmail(dto.email)) {
-			throw new HttpException('Email is incorrect', HttpStatus.BAD_REQUEST)
-		}
 		const user = await this.validateUser(dto)
 		return this.generateToken(user)
 	}

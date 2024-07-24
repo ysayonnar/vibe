@@ -6,6 +6,8 @@ import {
 	Post,
 	Req,
 	UseGuards,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common'
 import { FriendService } from './friend.service'
 import { RequestDto } from './dto/request-dto'
@@ -15,6 +17,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 export class FriendController {
 	constructor(private friendService: FriendService) {}
 
+	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
 	@Post('/send')
 	async sendFriendRequest(@Body() dto: RequestDto, @Req() req) {

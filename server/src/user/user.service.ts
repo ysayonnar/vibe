@@ -90,22 +90,22 @@ export class UserService {
 		return createdUser
 	}
 
-	async giveRole(dto: GiveRoleDto) {
-		const user: User = await this.getUserById(dto.userId)
+	async giveRole(userId, dto: GiveRoleDto) {
+		const user: User = await this.getUserById(userId)
 		const role = await this.roleService.getRoleByName(dto.roleName)
 		await user.$add('role', role.id)
 		return user
 	}
 
-	async removeRole(dto: GiveRoleDto) {
-		const user: User = await this.getUserById(dto.userId)
+	async removeRole(userId, dto: GiveRoleDto) {
+		const user: User = await this.getUserById(userId)
 		const role = await this.roleService.getRoleByName(dto.roleName)
 		await user.$remove('role', role.id)
 		return user
 	}
 
-	async banUser(dto: BanUserDto) {
-		const user: User = await this.getUserById(dto.userId)
+	async banUser(userId, dto: BanUserDto) {
+		const user: User = await this.getUserById(userId)
 		if (user.isBanned === true) {
 			throw new HttpException('User already banned', HttpStatus.BAD_REQUEST)
 		}
@@ -115,8 +115,8 @@ export class UserService {
 		return user
 	}
 
-	async unbanUser(id: number) {
-		const user: User = await this.getUserById(id)
+	async unbanUser(userId: number) {
+		const user: User = await this.getUserById(userId)
 		if (user.isBanned === false) {
 			throw new HttpException(
 				'User you want to unban is not banned',

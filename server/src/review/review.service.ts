@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import { Review } from './review.model'
 import { ReviewCreationDto } from './dto/review.dto'
-import { ReviewUpdateDto } from './dto/reviewUpdate.dto'
 import { PlaceService } from 'src/place/place.service'
 import { Place } from 'src/place/place.model'
 
@@ -43,7 +42,7 @@ export class ReviewService {
 		return reviews
 	}
 
-	async createReview(dto: ReviewCreationDto, user) {
+	async createReview(placeId, dto: ReviewCreationDto, user) {
 		if (dto.grade > 5 || dto.grade < 1) {
 			throw new HttpException(
 				'Grade must be from 1 to 5',
@@ -53,7 +52,7 @@ export class ReviewService {
 		const candidate = await this.reviewRepository.findOne({
 			where: {
 				userId: user.id,
-				placeId: dto.placeId,
+				placeId: placeId,
 			},
 		})
 		if (candidate) {
@@ -66,18 +65,18 @@ export class ReviewService {
 			...dto,
 			userId: user.id,
 		})
-		await this.calculateRating(dto.placeId)
+		await this.calculateRating(placeId)
 		return createdReview
 	}
 
-	async updateReview(dto: ReviewUpdateDto, user) {
+	async updateReview(reviewId, dto: ReviewCreationDto, user) {
 		if (dto.grade > 5 || dto.grade < 1) {
 			throw new HttpException(
 				'Grade must be from 1 to 5',
 				HttpStatus.BAD_REQUEST
 			)
 		}
-		const review: Review = await this.getReviewById(dto.reviewId)
+		const review: Review = await this.getReviewById(reviewId)
 		if (review.userId != user.id) {
 			throw new HttpException(
 				'This review is not for this user',

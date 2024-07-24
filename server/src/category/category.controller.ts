@@ -6,6 +6,8 @@ import {
 	Param,
 	Post,
 	UseGuards,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { CreateCategoryDto } from './dto/category.dto'
@@ -31,15 +33,16 @@ export class CategoryController {
 		return this.categoryService.getCategoryByName(name)
 	}
 
-	// @Roles('ADMIN')
-	// @UseGuards(RolesGuard)
+	@Roles('ADMIN')
+	@UseGuards(RolesGuard)
+	@UsePipes(ValidationPipe)
 	@Post('/create')
 	async createCategory(@Body() dto: CreateCategoryDto) {
 		return this.categoryService.createCategory(dto)
 	}
 
-	// @Roles('ADMIN')
-	// @UseGuards(RolesGuard)
+	@Roles('ADMIN')
+	@UseGuards(RolesGuard)
 	@Delete('/delete/:id')
 	async deleteCategory(@Param('id') id: number) {
 		return this.categoryService.deleteCategory(id)

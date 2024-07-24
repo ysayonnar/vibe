@@ -62,7 +62,7 @@ export class PlaceService {
 
 	async createPlace(dto: PlaceCreationDto, user, image) {
 		const places = await this.getAllPlaces()
-		if (this.isPlaceInRadius(dto, places, 10)) {
+		if (this.isPlaceInRadius(dto, places, 5)) {
 			throw new HttpException(
 				'Place cant be created in this area',
 				HttpStatus.BAD_REQUEST

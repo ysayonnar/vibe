@@ -1,4 +1,6 @@
+import { IsString } from 'class-validator'
+
 export class GiveRoleDto {
-	userId: number
+	@IsString({ message: 'Must be a string' })
 	roleName: string
 }
