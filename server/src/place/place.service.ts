@@ -15,6 +15,34 @@ export class PlaceService {
 		readonly categoryService: CategoryService
 	) {}
 
+	isPlaceInRadius(target, places, radius: number = 5): boolean {
+		const R = 6371e3 // Радиус Земли в метрах
+
+		function toRadians(degrees: number): number {
+			return degrees * (Math.PI / 180)
+		}
+
+		function haversineDistance(coord1, coord2): number {
+			const width1 = toRadians(coord1.width)
+			const width2 = toRadians(coord2.width)
+			const deltaWidth = toRadians(coord2.width - coord1.width)
+			const deltaLon = toRadians(coord2.longtitude - coord1.longtitude)
+
+			const a =
+				Math.sin(deltaWidth / 2) * Math.sin(deltaWidth / 2) +
+				Math.cos(width1) *
+					Math.cos(width2) *
+					Math.sin(deltaLon / 2) *
+					Math.sin(deltaLon / 2)
+
+			const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+
+			return R * c // Расстояние в метрах
+		}
+
+		return places.some(place => haversineDistance(target, place) <= radius)
+	}
+
 	async getAllPlaces() {
 		const places = await this.PlaceRepository.findAll({
 			include: { all: true },
@@ -33,12 +61,10 @@ export class PlaceService {
 	}
 
 	async createPlace(dto: PlaceCreationDto, user, image) {
-		const existingPlace = await this.PlaceRepository.findOne({
-			where: { longtitude: dto.longtitude, width: dto.width },
-		})
-		if (existingPlace) {
+		const places = await this.getAllPlaces()
+		if (this.isPlaceInRadius(dto, places, 10)) {
 			throw new HttpException(
-				'This place already exists.',
+				'Place cant be created in this area',
 				HttpStatus.BAD_REQUEST
 			)
 		}
