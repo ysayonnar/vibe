@@ -85,6 +85,11 @@ export class PlaceController {
 		return this.placeService.filterByCategories(categoriesId)
 	}
 
+	@Get('/filterByRating/:minimal')
+	async filterByRating(@Param('minimal') minimal: number) {
+		return this.placeService.filterByRating(minimal)
+	}
+
 	@UseGuards(JwtAuthGuard)
 	@Put('/setCategories/:id')
 	async setCategories(

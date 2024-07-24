@@ -151,6 +151,11 @@ export class PlaceService {
 		})
 	}
 
+	async filterByRating(minimalRate: number) {
+		const places = await this.getAllPlaces()
+		return places.filter(place => place.calculatedRating >= minimalRate)
+	}
+
 	async setCategories(placeId, categoriesId, user) {
 		const place = await this.getPlaceById(placeId)
 		if (place.userId != user.id) {
