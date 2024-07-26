@@ -4,6 +4,8 @@ import { Review } from './review.model'
 import { ReviewCreationDto } from './dto/review.dto'
 import { PlaceService } from 'src/place/place.service'
 import { Place } from 'src/place/place.model'
+import { NotFoundException } from 'src/exceptions/not-found.exception'
+import { NotBelongsException } from 'src/exceptions/not-belongs.exception'
 
 @Injectable()
 export class ReviewService {
@@ -30,7 +32,7 @@ export class ReviewService {
 	async getReviewById(id: number) {
 		const review = await this.reviewRepository.findByPk(id)
 		if (!review) {
-			throw new HttpException('No review with such id', HttpStatus.NOT_FOUND)
+			throw new NotFoundException('Review')
 		}
 		return review
 	}
@@ -78,10 +80,7 @@ export class ReviewService {
 		}
 		const review: Review = await this.getReviewById(reviewId)
 		if (review.userId != user.id) {
-			throw new HttpException(
-				'This review is not for this user',
-				HttpStatus.BAD_REQUEST
-			)
+			throw new NotBelongsException('Review')
 		}
 		await review.update({ ...dto })
 		await review.save()
@@ -92,10 +91,7 @@ export class ReviewService {
 	async deleteReview(id: number, user) {
 		const review = await this.getReviewById(id)
 		if (review.userId != user.id) {
-			throw new HttpException(
-				'This review is not for this user',
-				HttpStatus.BAD_REQUEST
-			)
+			throw new NotBelongsException('Review')
 		}
 		await review.destroy()
 		await this.calculateRating(review.placeId)

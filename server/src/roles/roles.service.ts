@@ -2,6 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import { Role } from './roles.model'
 import { CreateRoleDto } from './dto/create-role.dto'
+import { NotFoundException } from 'src/exceptions/not-found.exception'
+import { AlreadyExistsException } from 'src/exceptions/already-exists.exception'
 
 @Injectable()
 export class RolesService {
@@ -17,7 +19,7 @@ export class RolesService {
 			where: { name: roleName.toUpperCase() },
 		})
 		if (!role) {
-			throw new HttpException('No role with such name', HttpStatus.NOT_FOUND)
+			throw new NotFoundException('Role')
 		}
 		return role
 	}
@@ -27,7 +29,7 @@ export class RolesService {
 			where: { name: dto.name.toUpperCase() },
 		})
 		if (check) {
-			throw new HttpException('Such role alredy exists', HttpStatus.BAD_REQUEST)
+			throw new AlreadyExistsException('Role')
 		}
 		const role = await this.roleRepository.create({
 			...dto,
@@ -43,7 +45,7 @@ export class RolesService {
 		if (deletedRole === 1) {
 			return { msg: 'successfully deleted' }
 		} else if (deletedRole === 0) {
-			throw new HttpException('No role with such name', HttpStatus.NOT_FOUND)
+			throw new NotFoundException('Role')
 		}
 	}
 }

@@ -5,6 +5,9 @@ import { FriendRequest } from './friend_request.model'
 import { RequestDto } from './dto/request-dto'
 import { UserService } from 'src/user/user.service'
 import { User } from 'src/user/user.model'
+import { NotFoundException } from 'src/exceptions/not-found.exception'
+import { NotBelongsException } from 'src/exceptions/not-belongs.exception'
+import { ServerErrorException } from 'src/exceptions/server-error.exception'
 
 @Injectable()
 export class FriendService {
@@ -36,7 +39,7 @@ export class FriendService {
 		const request: FriendRequest =
 			await this.friendRequestRepositoty.findByPk(id)
 		if (!request) {
-			throw new HttpException('No request with such id', HttpStatus.NOT_FOUND)
+			throw new NotFoundException('Friend Request')
 		}
 
 		//для проверки
@@ -44,10 +47,7 @@ export class FriendService {
 		const recipient = await this.userService.getUserById(request.recipientId)
 
 		if (recipient.id !== user.id) {
-			throw new HttpException(
-				'This friend request is not for this user',
-				HttpStatus.BAD_REQUEST
-			)
+			throw new NotBelongsException('Friend Request')
 		}
 
 		const friend_relation1 = await this.friendRepository.create({
@@ -67,18 +67,15 @@ export class FriendService {
 	async declineFriendRequest(id: number, user) {
 		const request = await this.friendRequestRepositoty.findByPk(id)
 		if (!request) {
-			throw new HttpException('No request with such id', HttpStatus.NOT_FOUND)
+			throw new NotFoundException('Friend Request')
 		}
 		if (request.recipientId !== user.id) {
-			throw new HttpException(
-				'This friend request is not for this user',
-				HttpStatus.BAD_REQUEST
-			)
+			throw new NotBelongsException('Friend Request')
 		}
 		try {
 			await request.destroy()
 		} catch (e) {
-			throw new HttpException('Not declined', HttpStatus.BAD_REQUEST)
+			throw new ServerErrorException()
 		}
 		return { msg: 'declined' }
 	}
@@ -92,7 +89,7 @@ export class FriendService {
 				return { msg: 'friend deleted' }
 			}
 			if (deletedFriend === 0) {
-				throw new HttpException('No friend with such id', HttpStatus.NOT_FOUND)
+				throw new NotFoundException('Friend')
 			}
 		} catch (e) {
 			throw new HttpException('something went wrong', HttpStatus.BAD_GATEWAY)

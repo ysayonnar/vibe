@@ -5,6 +5,9 @@ import { PlaceCreationDto } from './dto/place.dto'
 import { UserService } from 'src/user/user.service'
 import { FilesService } from 'src/files/files.service'
 import { CategoryService } from 'src/category/category.service'
+import { NotFoundException } from 'src/exceptions/not-found.exception'
+import { ServerErrorException } from 'src/exceptions/server-error.exception'
+import { NotBelongsException } from 'src/exceptions/not-belongs.exception'
 
 @Injectable()
 export class PlaceService {
@@ -54,10 +57,10 @@ export class PlaceService {
 		const place = await this.PlaceRepository.findByPk(id, {
 			include: { all: true },
 		})
-		if (place) {
-			return place
+		if (!place) {
+			throw new NotFoundException('Place')
 		}
-		throw new HttpException('no place with such id', HttpStatus.NOT_FOUND)
+		return place
 	}
 
 	async createPlace(dto: PlaceCreationDto, user, image) {
@@ -77,7 +80,7 @@ export class PlaceService {
 			})
 			return createdPlace
 		} catch (e) {
-			throw new HttpException('Something went wrong', HttpStatus.BAD_GATEWAY)
+			throw new ServerErrorException()
 		}
 	}
 
@@ -101,10 +104,7 @@ export class PlaceService {
 	async changePhoto(user, file, placeId) {
 		const place = await this.getPlaceById(placeId)
 		if (place.userId != user.id) {
-			throw new HttpException(
-				'This place is not for this user',
-				HttpStatus.FORBIDDEN
-			)
+			throw new NotBelongsException('Place')
 		}
 		if (place.image.length == 0) {
 			const fileName = await this.filesService.createFile(file)
@@ -118,10 +118,7 @@ export class PlaceService {
 	async deletePhoto(placeId: number, user) {
 		const place = await this.getPlaceById(placeId)
 		if (place.userId != user.id) {
-			throw new HttpException(
-				'This place is not for this user',
-				HttpStatus.FORBIDDEN
-			)
+			throw new NotBelongsException('Place')
 		}
 		if (place.image.length == 0) {
 			throw new HttpException('No photo for this place', HttpStatus.BAD_REQUEST)
@@ -146,7 +143,7 @@ export class PlaceService {
 				this.filesService.deletePhoto(place.image)
 				place.destroy()
 			})
-			.catch(() => new HttpException('Not deleted', HttpStatus.BAD_GATEWAY))
+			.catch(() => new ServerErrorException())
 		return { msg: 'deleted' }
 	}
 
@@ -185,10 +182,7 @@ export class PlaceService {
 	async setCategories(placeId, categoriesId, user) {
 		const place = await this.getPlaceById(placeId)
 		if (place.userId != user.id) {
-			throw new HttpException(
-				'This place is not for this user',
-				HttpStatus.FORBIDDEN
-			)
+			throw new NotBelongsException('Place')
 		}
 		try {
 			await Promise.all(
@@ -200,10 +194,7 @@ export class PlaceService {
 			if (e instanceof HttpException) {
 				throw e
 			}
-			throw new HttpException(
-				'No category with one of the id',
-				HttpStatus.NOT_FOUND
-			)
+			throw new NotFoundException('Category')
 		}
 		await place.$set('categories', categoriesId)
 		const categories = await Promise.all(

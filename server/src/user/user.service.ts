@@ -8,6 +8,8 @@ import { BanUserDto } from './dto/banUser.dto'
 import { EditBioDto } from './dto/editBio.dto'
 import { EditTguserDto } from './dto/editTguser.dto'
 import { FilesService } from 'src/files/files.service'
+import { AlreadyExistsException } from 'src/exceptions/already-exists.exception'
+import { NotFoundException } from 'src/exceptions/not-found.exception'
 
 @Injectable()
 export class UserService {
@@ -25,9 +27,8 @@ export class UserService {
 			where: { username: dto.username },
 		})
 		if (candidateByEmail || candidateByUsername) {
-			throw new HttpException(
-				'User with such email or username already exists',
-				HttpStatus.BAD_REQUEST
+			throw new AlreadyExistsException(
+				'User with such email or username already exists'
 			)
 		}
 		return true
@@ -46,7 +47,7 @@ export class UserService {
 			include: { all: true },
 		})
 		if (!user) {
-			throw new HttpException('No user with such id', HttpStatus.NOT_FOUND)
+			throw new NotFoundException('User')
 		}
 		return user
 	}
@@ -57,10 +58,7 @@ export class UserService {
 			include: { all: true },
 		})
 		if (!user) {
-			throw new HttpException(
-				'No user with such username',
-				HttpStatus.NOT_FOUND
-			)
+			throw new NotFoundException('user')
 		}
 		return user
 	}
@@ -71,7 +69,7 @@ export class UserService {
 			include: { all: true },
 		})
 		if (!user) {
-			throw new HttpException('No user with such email', HttpStatus.NOT_FOUND)
+			throw new NotFoundException('user')
 		}
 		return user
 	}
@@ -149,10 +147,7 @@ export class UserService {
 			where: { telegram_username: dto.telegram_username },
 		})
 		if (candidate) {
-			throw new HttpException(
-				'User with such telegram already exists',
-				HttpStatus.BAD_REQUEST
-			)
+			throw new AlreadyExistsException('User with such telegram already exists')
 		}
 		const user: User = await this.getUserById(jwtUser.id).then(user => {
 			user.telegram_username = dto.telegram_username

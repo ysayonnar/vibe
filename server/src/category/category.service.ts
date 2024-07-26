@@ -2,6 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
 import { Category } from './category.model'
 import { CreateCategoryDto } from './dto/category.dto'
+import { NotFoundException } from 'src/exceptions/not-found.exception'
+import { AlreadyExistsException } from 'src/exceptions/already-exists.exception'
 
 @Injectable()
 export class CategoryService {
@@ -21,7 +23,7 @@ export class CategoryService {
 			include: { all: true },
 		})
 		if (!category) {
-			throw new HttpException('No category with such id', HttpStatus.NOT_FOUND)
+			throw new NotFoundException('Category')
 		}
 		return category
 	}
@@ -32,10 +34,7 @@ export class CategoryService {
 			include: { all: true },
 		})
 		if (!category) {
-			throw new HttpException(
-				'No category with such name',
-				HttpStatus.NOT_FOUND
-			)
+			throw new NotFoundException('Category')
 		}
 		return category
 	}
@@ -46,10 +45,7 @@ export class CategoryService {
 			where: { name: loweredName },
 		})
 		if (candidate) {
-			throw new HttpException(
-				'Category with such name already exists',
-				HttpStatus.BAD_REQUEST
-			)
+			throw new AlreadyExistsException('Category with such name already exists')
 		}
 		const category = await this.categoryRepository.create({
 			...dto,
