@@ -20,6 +20,7 @@ import { CategoryModule } from './category/category.module'
 import * as path from 'path'
 import { Category } from './category/category.model'
 import { PlaceCategory } from './category/category-place.model'
+import { PlaceUserFavourite } from './place/place-user-favourite'
 
 @Module({
 	imports: [
@@ -45,6 +46,7 @@ import { PlaceCategory } from './category/category-place.model'
 				Review,
 				Category,
 				PlaceCategory,
+				PlaceUserFavourite,
 			],
 			autoLoadModels: true,
 		}),

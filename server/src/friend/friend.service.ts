@@ -30,8 +30,8 @@ export class FriendService {
 		const sender = await this.userService.getUserById(user.id)
 		const recipient = await this.userService.getUserById(dto.recipientId)
 
-		const requstPayload = { ...dto, senderId: user.id }
-		const request = await this.friendRequestRepositoty.create(requstPayload)
+		const requestPayload = { ...dto, senderId: user.id }
+		const request = await this.friendRequestRepositoty.create(requestPayload)
 		return request
 	}
 

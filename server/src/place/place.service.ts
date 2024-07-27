@@ -207,4 +207,16 @@ export class PlaceService {
 		const saved = await this.getPlaceById(placeId)
 		return saved
 	}
+
+	async addToFavourite(placeId, jwtUser) {
+		const place = await this.getPlaceById(placeId)
+		await place.$add('favourite_users', jwtUser.id)
+		return place
+	}
+
+	async deleteFromFavourite(placeId, jwtUser) {
+		const place = await this.getPlaceById(placeId)
+		await place.$remove('favourite_users', jwtUser.id)
+		return place
+	}
 }

@@ -11,7 +11,6 @@ import {
 	UseGuards,
 	UseInterceptors,
 	UsePipes,
-	ValidationPipe,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { GiveRoleDto } from './dto/giveRole.dto'
@@ -22,7 +21,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
 import { FileInterceptor } from '@nestjs/platform-express'
-import { number } from 'zod'
+import { ValidationPipe } from 'src/pipes/validation.pipe'
 
 @Controller('user')
 export class UserController {

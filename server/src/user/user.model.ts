@@ -2,12 +2,14 @@ import {
 	BelongsToMany,
 	Column,
 	DataType,
+	ForeignKey,
 	HasMany,
 	Model,
 	Table,
 } from 'sequelize-typescript'
 import { Friend } from 'src/friend/friend.model'
 import { FriendRequest } from 'src/friend/friend_request.model'
+import { PlaceUserFavourite } from 'src/place/place-user-favourite'
 import { Place } from 'src/place/place.model'
 import { Review } from 'src/review/review.model'
 import { Role } from 'src/roles/roles.model'
@@ -74,4 +76,7 @@ export class User extends Model<User, UserCreationInterface> {
 
 	@HasMany(() => Review, 'userId')
 	created_reviews: Review[]
+
+	@BelongsToMany(() => Place, () => PlaceUserFavourite)
+	favourite_places: Place[]
 }

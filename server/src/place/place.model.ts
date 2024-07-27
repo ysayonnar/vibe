@@ -12,6 +12,7 @@ import { PlaceCategory } from 'src/category/category-place.model'
 import { Category } from 'src/category/category.model'
 import { Review } from 'src/review/review.model'
 import { User } from 'src/user/user.model'
+import { PlaceUserFavourite } from './place-user-favourite'
 
 export interface PlaceCreate {
 	longtitude: number
@@ -62,4 +63,7 @@ export class Place extends Model<Place, PlaceCreate> {
 
 	@BelongsToMany(() => Category, () => PlaceCategory)
 	categories: Category[]
+
+	@BelongsToMany(() => User, () => PlaceUserFavourite)
+	favourite_users: User[]
 }
