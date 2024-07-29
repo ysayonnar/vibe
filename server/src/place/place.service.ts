@@ -175,6 +175,12 @@ export class PlaceService {
 	}
 
 	async filterByRating(minimalRate: number) {
+		if (minimalRate > 5 || minimalRate < 1) {
+			throw new HttpException(
+				'Rating should be from 1 to 5',
+				HttpStatus.BAD_REQUEST
+			)
+		}
 		const places = await this.getAllPlaces()
 		return places.filter(place => place.calculatedRating >= minimalRate)
 	}
