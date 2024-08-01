@@ -1,14 +1,9 @@
 import React from 'react'
-import MainMap from './components/Map'
-import SideBar from './components/UI/SideBar/SideBar'
+
+import Router from './components/Router'
 
 function App() {
-	return (
-		<div>
-			<SideBar />
-			{/* <MainMap /> */}
-		</div>
-	)
+	return <Router />
 }
 
 export default App
