@@ -1,8 +1,8 @@
 .button {
-	margin: 3px 0;
+	margin: 3px 5px;
 	display: flex;
 	align-items: center;
-	max-width: 150px;
+	max-width: 180px;
 	height: 35px;
 	border-radius: 20px;
 	border: none;
@@ -12,8 +12,25 @@
 	font-size: 16px;
 	text-align: left;
 	padding: 0 10px;
+	transition: all ease 0.7s;
+}
+
+.active__button {
+	margin: 3px 5px;
+	display: flex;
+	align-items: center;
+	max-width: 180px;
+	height: 35px;
+	border-radius: 20px;
+	border: none;
+	background-color: rgb(42, 42, 42);
+	color: rgb(219, 219, 219);
+	font-weight: 600;
+	font-size: 16px;
+	text-align: left;
+	padding: 0 10px;
 }
 
 .button:hover {
-	background-color: rgb(42, 42, 42);
+	background-color: rgb(31, 31, 31);
 }

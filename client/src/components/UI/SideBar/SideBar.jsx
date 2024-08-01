@@ -7,8 +7,45 @@ import user from '../../../static/user.png'
 import friend from '../../../static/friends.png'
 import news from '../../../static/megaphone.png'
 import fav from '../../../static/star.png'
+import { useHref, useNavigate } from 'react-router-dom'
 
 const SideBar = () => {
+	const router = useNavigate()
+	const currentHref = useHref()
+
+	const sideBarOptions = [
+		{
+			src: map,
+			text: 'Map',
+			href: '/map',
+		},
+		{
+			src: place,
+			text: 'Places',
+			href: '/places',
+		},
+		{
+			src: fav,
+			text: 'Favourite',
+			href: '/favourite',
+		},
+		{
+			src: user,
+			text: 'Account',
+			href: '/user',
+		},
+		{
+			src: friend,
+			text: 'friends',
+			href: '/friends',
+		},
+		{
+			src: news,
+			text: 'News',
+			href: '/news',
+		},
+	]
+
 	return (
 		<div className={cl['sidebar__container']}>
 			<div className={cl.logo}>
@@ -19,38 +56,23 @@ const SideBar = () => {
 				<p className={cl['sidebar__user__name']}>Hleb Nahorny</p>
 			</div>
 			<div className={cl['sidebar__buttons']}>
-				<SideBarButton>
-					<img src={map} className={cl['sidebar__buttons__images']} alt='no' />{' '}
-					Map
-				</SideBarButton>
-				<SideBarButton>
-					<img
-						src={place}
-						className={cl['sidebar__buttons__images']}
-						alt='no'
-					/>{' '}
-					Places
-				</SideBarButton>
-				<SideBarButton>
-					<img src={fav} className={cl['sidebar__buttons__images']} alt='no' />
-					Favourite
-				</SideBarButton>
-				<SideBarButton>
-					<img src={user} className={cl['sidebar__buttons__images']} alt='no' />
-					Account
-				</SideBarButton>
-				<SideBarButton>
-					<img
-						src={friend}
-						className={cl['sidebar__buttons__images']}
-						alt='no'
-					/>
-					Friends
-				</SideBarButton>
-				<SideBarButton>
-					<img src={news} className={cl['sidebar__buttons__images']} alt='no' />
-					News
-				</SideBarButton>
+				{sideBarOptions.map(option => (
+					<SideBarButton
+						isActive={option.href === currentHref}
+						key={option.text}
+						onClick={e => {
+							e.preventDefault()
+							router(option.href)
+						}}
+					>
+						<img
+							src={option.src}
+							className={cl['sidebar__buttons__images']}
+							alt='no'
+						/>
+						{option.text}
+					</SideBarButton>
+				))}
 			</div>
 		</div>
 	)
