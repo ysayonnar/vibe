@@ -36,7 +36,7 @@ const SideBar = () => {
 		},
 		{
 			src: friend,
-			text: 'friends',
+			text: 'Friends',
 			href: '/friends',
 		},
 		{
