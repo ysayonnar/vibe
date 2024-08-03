@@ -30,7 +30,7 @@ const MainPage = () => {
 				</p>
 				<button
 					className='center__quote__button'
-					onClick={() => navigate('/map')}
+					onClick={() => navigate('/registration')}
 				>
 					Get started
 				</button>
@@ -40,7 +40,7 @@ const MainPage = () => {
 				<a href='https://github.com/ysayonnar'>
 					<img className='social__img' src={github} alt='' />
 				</a>
-				<a href=''>
+				<a href='https://t.me/ysnrite'>
 					<img className='social__img' src={tg} alt='' />
 				</a>
 			</div>

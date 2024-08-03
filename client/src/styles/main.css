@@ -103,3 +103,46 @@ body {
 	width: 50px;
 	height: 50px;
 }
+
+/* form container */
+
+.form__container {
+	background-color: rgb(20, 20, 31);
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.form__inner__container {
+	background-color: rgb(22, 20, 25);
+	width: 480px;
+	height: 600px;
+	box-shadow: inset;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 10px;
+}
+
+.form {
+	margin: 0 40px;
+}
+
+.form__h1 {
+	color: white;
+	text-align: center;
+	margin: 20px 0;
+}
+
+.form__redirect {
+	text-align: center;
+	color: rgba(255, 255, 255, 0.671);
+	font-size: 18px;
+	font-weight: 500;
+}
+
+.form__redirect div {
+	cursor: pointer;
+	text-decoration: underline;
+	color: rgb(144, 79, 204);
+}
