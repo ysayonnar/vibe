@@ -1,6 +1,6 @@
 import SideBarButton from '../SideBarButton/SideBarButton'
 import cl from './SideBar.module.css'
-import human from '../../../static/human.jpg'
+import defUser from '../../../static/defUser.jpg'
 import map from '../../../static/address.png'
 import place from '../../../static/pin.png'
 import userImg from '../../../static/user.png'
@@ -72,7 +72,11 @@ const SideBar = () => {
 				<h1>VIBE</h1>
 			</div>
 			<div className={cl['sidebar__user']}>
-				<img src={human} className={cl['sidebar__user_avatar']} alt='no' />
+				<img
+					src={user.avatar ? `http://localhost:5000/${user.avatar}` : defUser}
+					className={cl['sidebar__user_avatar']}
+					alt='no'
+				/>
 				<p className={cl['sidebar__user__name']}>{user.username}</p>
 			</div>
 			<div className={cl['sidebar__buttons']}>

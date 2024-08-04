@@ -9,7 +9,7 @@ export class FilesService {
 	async createFile(file): Promise<string> {
 		try {
 			const fileName = uuid.v4() + '.jpg'
-			const filePath = path.resolve(__dirname, '../../src', 'static')
+			const filePath = path.resolve(__dirname, '../../dist', 'static')
 			if (!fs.existsSync(filePath)) {
 				fs.mkdirSync(filePath, { recursive: true })
 			}
@@ -22,7 +22,7 @@ export class FilesService {
 
 	async rewriteFile(file, oldFileName) {
 		try {
-			const filePath = path.resolve(__dirname, '../../src', 'static')
+			const filePath = path.resolve(__dirname, '../../dist', 'static')
 			fs.writeFileSync(path.join(filePath, oldFileName), file.buffer)
 		} catch (e) {
 			throw new ServerErrorException()
