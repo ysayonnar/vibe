@@ -155,3 +155,16 @@ body {
 	text-decoration: underline;
 	color: rgb(144, 79, 204);
 }
+
+/* user settings */
+.user__settings__container {
+	width: 87%;
+	height: 100vh;
+	background-color: rgb(13, 12, 19);
+}
+
+.user__settings__title {
+	color: whitesmoke;
+	margin-left: 40px;
+	margin-top: 20px;
+}

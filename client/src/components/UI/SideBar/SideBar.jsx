@@ -9,7 +9,7 @@ import news from '../../../static/megaphone.png'
 import fav from '../../../static/star.png'
 import logoutImg from '../../../static/logout.png'
 import { useHref, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 
 const SideBar = () => {
