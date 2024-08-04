@@ -3,16 +3,19 @@ import cl from './SideBar.module.css'
 import human from '../../../static/human.jpg'
 import map from '../../../static/address.png'
 import place from '../../../static/pin.png'
-import user from '../../../static/user.png'
+import userImg from '../../../static/user.png'
 import friend from '../../../static/friends.png'
 import news from '../../../static/megaphone.png'
 import fav from '../../../static/star.png'
+import logoutImg from '../../../static/logout.png'
 import { useHref, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const SideBar = () => {
 	const router = useNavigate()
 	const currentHref = useHref()
-
+	const [user, setUser] = useState({})
 	const sideBarOptions = [
 		{
 			src: map,
@@ -30,7 +33,7 @@ const SideBar = () => {
 			href: '/favourite',
 		},
 		{
-			src: user,
+			src: userImg,
 			text: 'Account',
 			href: '/user',
 		},
@@ -46,6 +49,23 @@ const SideBar = () => {
 		},
 	]
 
+	useEffect(() => {
+		fetchUserData()
+	}, [])
+
+	async function fetchUserData() {
+		await axios
+			.get('http://localhost:5000/auth/info', {
+				headers: { authorization: `Bearer ${localStorage.getItem('auth')}` },
+			})
+			.then(response => setUser(response.data))
+	}
+
+	function logout() {
+		localStorage.removeItem('auth')
+		router('/')
+	}
+
 	return (
 		<div className={cl['sidebar__container']}>
 			<div className={cl.logo}>
@@ -53,7 +73,7 @@ const SideBar = () => {
 			</div>
 			<div className={cl['sidebar__user']}>
 				<img src={human} className={cl['sidebar__user_avatar']} alt='no' />
-				<p className={cl['sidebar__user__name']}>Hleb Nahorny</p>
+				<p className={cl['sidebar__user__name']}>{user.username}</p>
 			</div>
 			<div className={cl['sidebar__buttons']}>
 				{sideBarOptions.map(option => (
@@ -73,6 +93,10 @@ const SideBar = () => {
 						{option.text}
 					</SideBarButton>
 				))}
+			</div>
+			<div className={cl.logout} onClick={() => logout()}>
+				<h1>Log out</h1>
+				<img src={logoutImg} alt='no' />
 			</div>
 		</div>
 	)

@@ -50,4 +50,9 @@ export class AuthService {
 		const user = await this.validateUser(dto)
 		return this.generateToken(user)
 	}
+
+	async getInfoByJwt(user) {
+		const info = await this.userService.getUserById(user.id)
+		return info
+	}
 }
