@@ -34,7 +34,7 @@ export class AuthService {
 		if (password_equals) {
 			return user
 		}
-		throw new HttpException('Password is not valid', HttpStatus.BAD_REQUEST)
+		throw new HttpException('Password is not valid', HttpStatus.FORBIDDEN)
 	}
 
 	async registration(dto: UserCreationDto) {

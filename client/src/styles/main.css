@@ -118,7 +118,16 @@ body {
 .form__inner__container {
 	background-color: rgb(22, 20, 25);
 	width: 480px;
-	height: 600px;
+	height: 580px;
+	box-shadow: inset;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	border-radius: 10px;
+}
+
+.form__inner__container__login {
+	background-color: rgb(22, 20, 25);
+	width: 480px;
+	height: 450px;
 	box-shadow: inset;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	border-radius: 10px;

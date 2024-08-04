@@ -25,6 +25,7 @@ const RegistrationForm = () => {
 				setUsernameError('')
 				const token = response.data.token
 				localStorage.setItem('auth', token)
+				setUserPayload({ email: '', username: '', password_hash: '' })
 				navigate('/map')
 			})
 			.catch(e => {
@@ -33,7 +34,6 @@ const RegistrationForm = () => {
 				setUsernameError('')
 				parseErrors(e.response.data.message, e.response.status)
 			})
-		setUserPayload({ email: '', username: '', password_hash: '' })
 	}
 
 	function parseErrors(errArr, status) {
@@ -94,7 +94,7 @@ const RegistrationForm = () => {
 
 				<div className='form__redirect'>
 					Already have an account?{' '}
-					<div onClick={() => navigate('/login')}>Log in</div>
+					<div onClick={() => navigate('/login')}>Sign In</div>
 				</div>
 			</div>
 		</div>

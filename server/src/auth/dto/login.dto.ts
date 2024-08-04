@@ -6,6 +6,6 @@ export class loginDto {
 	email: string
 
 	@IsString({ message: 'Must be string' })
-	@Length(4, 16, { message: 'passwrod must be from 4 to 16 symbols' })
+	@Length(4, 16, { message: 'password must be from 4 to 16 symbols' })
 	password: string
 }
