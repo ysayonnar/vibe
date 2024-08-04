@@ -35,6 +35,11 @@ const LoginForm = () => {
 			setPasswordError(errArr)
 			return
 		}
+		if (status === 404) {
+			setEmailError(errArr)
+			setPasswordError('')
+			return
+		}
 		for (let i = 0; i < errArr.length; i++) {
 			const error = errArr[i]
 			if (error.includes('email')) {
