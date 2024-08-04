@@ -8,17 +8,17 @@ const MainPage = () => {
 	return (
 		<div className='main__container'>
 			<div className='nav'>
-				<a href='' onClick={() => navigate('/')}>
+				<a href='/' onClick={() => navigate('/')}>
 					Home
 				</a>
-				<a href='' onClick={() => navigate('/')}>
+				<a href='/' onClick={() => navigate('/')}>
 					Vibe
 				</a>
 				<img className='nav__placemark' src={placeamark} alt='no' />
-				<a href='' onClick={() => navigate('/')}>
+				<a href='/' onClick={() => navigate('/')}>
 					About us
 				</a>
-				<a href='' onClick={() => navigate('/')}>
+				<a href='/' onClick={() => navigate('/')}>
 					Contact
 				</a>
 			</div>
