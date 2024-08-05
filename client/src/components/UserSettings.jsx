@@ -3,9 +3,15 @@ import defUser from '../static/defUser.jpg'
 import axios from 'axios'
 import CustomButton from './UI/CustomButton/CustomButton'
 import Modal from './UI/Modal/Modal'
+import Drag from './UI/Drag/Drag'
 
 const UserSettings = () => {
-	const [isModal, setIsModal] = useState(false)
+	const [isAvatarChangeModal, setIsAvatarChangeModal] = useState(false)
+	const [isAvatarDeleteModal, setIsAvatarDeleteModal] = useState(false)
+	const [deleteAvatarMessage, setDeleteAvatarMessage] = useState({
+		msg: '',
+		color: '',
+	})
 	const [user, setUser] = useState({})
 	useEffect(() => {
 		fetchUserData()
@@ -21,6 +27,18 @@ const UserSettings = () => {
 			})
 	}
 
+	async function deleteAvatar() {
+		await axios
+			.delete('http://localhost:5000/user/avatar', {
+				headers: { authorization: `Bearer ${localStorage.getItem('auth')}` },
+			})
+			.then(response => {
+				setDeleteAvatarMessage({ msg: 'Successfully deleted', color: 'green' })
+			})
+			.catch(e => {
+				setDeleteAvatarMessage({ msg: e.response.data.message, color: 'red' })
+			})
+	}
 	return (
 		<div className='user__settings__container'>
 			<h1 className='user__settings__title'>Account Settings</h1>
@@ -30,12 +48,49 @@ const UserSettings = () => {
 					alt='no'
 					className='user__settings__avatar__img'
 				/>
-				<CustomButton onClick={() => setIsModal(true)}>Change</CustomButton>
-				<CustomButton style={{ backgroundColor: 'red' }}>Delete</CustomButton>
+				<CustomButton onClick={() => setIsAvatarChangeModal(true)}>
+					Change
+				</CustomButton>
+				<CustomButton
+					style={{ backgroundColor: 'red' }}
+					onClick={() => setIsAvatarDeleteModal(true)}
+				>
+					Delete
+				</CustomButton>
 			</div>
-			{isModal && (
-				<Modal isModal={isModal} setIsModal={setIsModal}>
-					привет
+			{isAvatarChangeModal && (
+				<Modal
+					isModal={isAvatarChangeModal}
+					setIsModal={setIsAvatarChangeModal}
+				>
+					<Drag />
+				</Modal>
+			)}
+			{isAvatarDeleteModal && (
+				<Modal
+					isModal={isAvatarDeleteModal}
+					setIsModal={setIsAvatarDeleteModal}
+				>
+					<div className='user__settings__delete__avatar'>
+						<h1>Are you sure you want to delete your avatar?</h1>
+						<div className='user__settings__delete__buttons'>
+							<button id='no' onClick={() => setIsAvatarDeleteModal(false)}>
+								No
+							</button>
+							<button id='yes' onClick={() => deleteAvatar()}>
+								Yes
+							</button>
+						</div>
+						<h1
+							style={{
+								textAlign: 'center',
+								color: deleteAvatarMessage.color,
+								fontSize: '16px',
+							}}
+						>
+							{deleteAvatarMessage.msg}
+						</h1>
+					</div>
 				</Modal>
 			)}
 		</div>

@@ -25,6 +25,7 @@ export class FilesService {
 			const filePath = path.resolve(__dirname, '../../dist', 'static')
 			fs.writeFileSync(path.join(filePath, oldFileName), file.buffer)
 		} catch (e) {
+			console.log(e)
 			throw new ServerErrorException()
 		}
 	}
