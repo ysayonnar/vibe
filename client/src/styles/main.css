@@ -168,3 +168,17 @@ body {
 	margin-left: 40px;
 	margin-top: 20px;
 }
+
+.user__settings__avatar {
+	margin: 15px 20px;
+	display: flex;
+	align-items: center;
+	width: 500px;
+	justify-content: space-around;
+}
+
+.user__settings__avatar__img {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+}
