@@ -4,6 +4,8 @@ import axios from 'axios'
 import CustomButton from './UI/CustomButton/CustomButton'
 import Modal from './UI/Modal/Modal'
 import Drag from './UI/Drag/Drag'
+import FormInput from '../components/UI/FormInput/FormInput'
+import FormButton from '../components/UI/FormButton/FormButton'
 
 const UserSettings = () => {
 	const [isAvatarChangeModal, setIsAvatarChangeModal] = useState(false)
@@ -12,6 +14,9 @@ const UserSettings = () => {
 		msg: '',
 		color: '',
 	})
+	const [isTgModal, setIsTgModal] = useState(false)
+	const [tg, setTg] = useState('')
+	const [tgSetting, setTgSettings] = useState({ msg: '', color: '' })
 	const [user, setUser] = useState({})
 	useEffect(() => {
 		fetchUserData()
@@ -39,6 +44,32 @@ const UserSettings = () => {
 				setDeleteAvatarMessage({ msg: e.response.data.message, color: 'red' })
 			})
 	}
+
+	async function editTelegram() {
+		await axios
+			.post(
+				'http://localhost:5000/user/tg',
+				{ telegram_username: tg },
+				{ headers: { authorization: `Bearer ${localStorage.getItem('auth')}` } }
+			)
+			.then(res => {
+				setUser({ ...user, telegram_username: tg })
+				setTg('')
+				setTgSettings({
+					msg: 'Successfully changed',
+					color: 'green',
+				})
+			})
+			.catch(e => {
+				console.log(e)
+				setTg('')
+				setTgSettings({
+					msg: e.response.data.message,
+					color: 'red',
+				})
+			})
+	}
+
 	return (
 		<div className='user__settings__container'>
 			<h1 className='user__settings__title'>Account Settings</h1>
@@ -49,13 +80,31 @@ const UserSettings = () => {
 					className='user__settings__avatar__img'
 				/>
 				<CustomButton onClick={() => setIsAvatarChangeModal(true)}>
-					Change
+					Upload new
 				</CustomButton>
 				<CustomButton
 					style={{ backgroundColor: 'red' }}
 					onClick={() => setIsAvatarDeleteModal(true)}
 				>
 					Delete
+				</CustomButton>
+			</div>
+			<div className='user__settings__telegram'>
+				<div className='user__settings__telegram__container'>
+					<h1>Current telegram username: </h1>
+					{user.telegram_username ? (
+						<a href={`https://t.me/${user.telegram_username.substring(1)}`}>
+							{user.telegram_username}
+						</a>
+					) : (
+						'none'
+					)}
+				</div>
+				<CustomButton
+					style={{ marginLeft: '20px' }}
+					onClick={() => setIsTgModal(true)}
+				>
+					Change
 				</CustomButton>
 			</div>
 			{isAvatarChangeModal && (
@@ -90,6 +139,25 @@ const UserSettings = () => {
 						>
 							{deleteAvatarMessage.msg}
 						</h1>
+					</div>
+				</Modal>
+			)}
+			{isTgModal && (
+				<Modal isModal={isTgModal} setIsModal={setIsTgModal}>
+					<div className='tg__edit__container'>
+						<FormInput
+							value={tg}
+							onChange={e => setTg(e.target.value)}
+							placeholder='New telegram username'
+							style={{ backgroundColor: '#d9d9d9', color: 'black' }}
+						/>
+						<FormButton
+							style={{ marginTop: '5px' }}
+							onClick={() => editTelegram()}
+						>
+							Save
+						</FormButton>
+						<h1 style={{ color: tgSetting.color }}>{tgSetting.msg}</h1>
 					</div>
 				</Modal>
 			)}

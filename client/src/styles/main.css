@@ -178,8 +178,8 @@ body {
 }
 
 .user__settings__avatar__img {
-	width: 150px;
-	height: 150px;
+	width: 130px;
+	height: 130px;
 	border-radius: 50%;
 }
 
@@ -220,4 +220,32 @@ body {
 	color: white;
 	font-size: 18px;
 	border-radius: 5px;
+}
+
+.user__settings__telegram {
+	display: flex;
+	align-items: center;
+	margin: 40px;
+	color: white;
+	font-size: 20px;
+}
+
+.user__settings__telegram__container {
+	display: flex;
+}
+
+.user__settings__telegram__container a {
+	font-style: italic;
+	text-decoration: none;
+	color: green;
+}
+
+.user__settings__telegram h1 {
+	font-size: 20px;
+	margin-right: 10px;
+}
+
+.tg__edit__container h1 {
+	font-size: 20px;
+	text-align: center;
 }
