@@ -17,6 +17,9 @@ const UserSettings = () => {
 	const [isTgModal, setIsTgModal] = useState(false)
 	const [tg, setTg] = useState('')
 	const [tgSetting, setTgSettings] = useState({ msg: '', color: '' })
+	const [isBioModal, setIsBioModal] = useState(false)
+	const [bio, setBio] = useState('')
+	const [bioSetting, setBioSettings] = useState({ msg: '', color: '' })
 	const [user, setUser] = useState({})
 	useEffect(() => {
 		fetchUserData()
@@ -70,6 +73,31 @@ const UserSettings = () => {
 			})
 	}
 
+	async function editBio() {
+		await axios
+			.post(
+				'http://localhost:5000/user/bio',
+				{ bio: bio },
+				{ headers: { authorization: `Bearer ${localStorage.getItem('auth')}` } }
+			)
+			.then(res => {
+				setUser({ ...user, bio: bio })
+				setBio('')
+				setBioSettings({
+					msg: 'Successfully changed',
+					color: 'green',
+				})
+			})
+			.catch(e => {
+				console.log(e)
+				setBio('')
+				setBioSettings({
+					msg: e.response.data.message,
+					color: 'red',
+				})
+			})
+	}
+
 	return (
 		<div className='user__settings__container'>
 			<h1 className='user__settings__title'>Account Settings</h1>
@@ -103,6 +131,18 @@ const UserSettings = () => {
 				<CustomButton
 					style={{ marginLeft: '20px' }}
 					onClick={() => setIsTgModal(true)}
+				>
+					Change
+				</CustomButton>
+			</div>
+			<div className='user__settings__telegram'>
+				<div className='user__settings__telegram__container'>
+					<h1>Current bio: </h1>
+					{user.bio ? user.bio : 'none'}
+				</div>
+				<CustomButton
+					style={{ marginLeft: '20px' }}
+					onClick={() => setIsBioModal(true)}
 				>
 					Change
 				</CustomButton>
@@ -158,6 +198,22 @@ const UserSettings = () => {
 							Save
 						</FormButton>
 						<h1 style={{ color: tgSetting.color }}>{tgSetting.msg}</h1>
+					</div>
+				</Modal>
+			)}
+			{isBioModal && (
+				<Modal isModal={isBioModal} setIsModal={setIsBioModal}>
+					<div className='tg__edit__container'>
+						<FormInput
+							value={bio}
+							onChange={e => setBio(e.target.value)}
+							placeholder='New bio'
+							style={{ backgroundColor: '#d9d9d9', color: 'black' }}
+						/>
+						<FormButton style={{ marginTop: '5px' }} onClick={() => editBio()}>
+							Save
+						</FormButton>
+						<h1 style={{ color: bioSetting.color }}>{bioSetting.msg}</h1>
 					</div>
 				</Modal>
 			)}
