@@ -249,3 +249,47 @@ body {
 	font-size: 20px;
 	text-align: center;
 }
+
+/* friends */
+
+.friends__container {
+	width: 87%;
+}
+
+.friends__nav {
+	margin: 10px auto;
+	background-color: rgb(80, 80, 80);
+	width: 500px;
+	height: 40px;
+	border-radius: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.friends__nav__btn {
+	cursor: pointer;
+	border: none;
+	margin: 0 10px;
+	height: 30px;
+	width: 200px;
+	background-color: rgb(110, 110, 110);
+	border-radius: 10px;
+	font-size: 16px;
+	transition: all ease 0.4s;
+}
+
+.friends__nav__btn:hover {
+	background-color: rgb(135, 135, 135);
+}
+
+.friends__nav__btn__selected {
+	cursor: pointer;
+	border: none;
+	margin: 0 10px;
+	height: 30px;
+	width: 200px;
+	background-color: rgb(176, 176, 176);
+	border-radius: 10px;
+	font-size: 16px;
+}
