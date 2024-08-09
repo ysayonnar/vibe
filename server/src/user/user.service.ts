@@ -10,6 +10,8 @@ import { EditTguserDto } from './dto/editTguser.dto'
 import { FilesService } from 'src/files/files.service'
 import { AlreadyExistsException } from 'src/exceptions/already-exists.exception'
 import { NotFoundException } from 'src/exceptions/not-found.exception'
+import { FriendRequest } from 'src/friend/friend_request.model'
+import { Friend } from 'src/friend/friend.model'
 
 @Injectable()
 export class UserService {
@@ -72,6 +74,47 @@ export class UserService {
 			throw new NotFoundException('user')
 		}
 		return user
+	}
+
+	async searchUsersByUsername(username: string, user) {
+		const users: User[] = await this.getAllUsers()
+		let foundedUsers = []
+		for (let i = 0; i < users.length; i++) {
+			const user: User = users[i]
+			const check = user.username
+				.toLowerCase()
+				.startsWith(username.toLowerCase())
+			if (check) {
+				foundedUsers.push(user)
+			}
+		}
+
+		foundedUsers = foundedUsers.filter((fUser: User) => fUser.id !== user.id)
+		foundedUsers = foundedUsers.filter(
+			(fUser: User) =>
+				!fUser.friend_requests.some(
+					(request: FriendRequest) => request.senderId == user.id
+				)
+		)
+
+		foundedUsers ==
+			foundedUsers.filter(
+				(fUser: User) =>
+					!fUser.sended_friend_requests.some(
+						(request: FriendRequest) => request.recipientId == user.id
+					)
+			)
+
+		foundedUsers = foundedUsers.filter(
+			(fUser: User) =>
+				!fUser.friends.some((friend: Friend) => friend.friendId == user.id)
+		)
+
+		if (foundedUsers.length === 0) {
+			throw new HttpException('Nothing found', HttpStatus.NOT_FOUND)
+		} else {
+			return foundedUsers
+		}
 	}
 
 	async createUser(dto: UserCreationDto) {
@@ -178,4 +221,3 @@ export class UserService {
 		return { msg: 'deleted' }
 	}
 }
-

@@ -47,6 +47,12 @@ export class UserController {
 		return this.userService.getUserByEmail(email)
 	}
 
+	@UseGuards(JwtAuthGuard)
+	@Get('/search/:username')
+	async searchUsersByUsername(@Param('username') username: string, @Req() req) {
+		return this.userService.searchUsersByUsername(username, req.user)
+	}
+
 	@UsePipes(ValidationPipe)
 	@Roles('ADMIN')
 	@UseGuards(RolesGuard)
