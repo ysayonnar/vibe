@@ -1,18 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 import cl from './Find.module.css'
 import FormButton from '../../components/UI/FormButton/FormButton'
 import UserCard from '../../components/UI/UserCard/UserCard'
 
 const Find = () => {
-	const [user, setUser] = useState({})
 	const [foundedUsers, setFoundedUsers] = useState([])
 	const [searchQuery, setSearchQuery] = useState('')
 	const [error, setError] = useState('')
-
-	useEffect(() => {
-		fetchUserData()
-	}, [])
 
 	async function search() {
 		if (searchQuery.length === 0) {
@@ -35,15 +30,6 @@ const Find = () => {
 			})
 	}
 
-	async function fetchUserData() {
-		await axios
-			.get('http://localhost:5000/auth/info', {
-				headers: { authorization: `Bearer ${localStorage.getItem('auth')}` },
-			})
-			.then(response => {
-				setUser(response.data)
-			})
-	}
 	return (
 		<div className={cl['main__container']}>
 			<div className={cl.search}>
