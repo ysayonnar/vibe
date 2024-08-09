@@ -1,0 +1,40 @@
+.main__container {
+	margin: 10px auto;
+	padding: 20px;
+	height: 650px;
+	width: 70%;
+	background-color: rgb(39, 39, 44);
+	border-radius: 40px;
+}
+
+.search {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	margin: 0 auto;
+	width: 90vh;
+	background-color: white;
+	padding: 5px 15px;
+	border-radius: 10px;
+}
+
+.search img {
+	width: 30px;
+	height: 30px;
+}
+
+.search input {
+	color: black;
+	font-size: 22px;
+	outline: none;
+	width: 580px;
+	border: none;
+	background-color: rgb(255, 255, 255);
+	height: 35px;
+}
+
+.error {
+	text-align: center;
+	margin-top: 40px;
+	color: rgb(255, 81, 81);
+}

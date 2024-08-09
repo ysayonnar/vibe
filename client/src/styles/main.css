@@ -253,12 +253,13 @@ body {
 /* friends */
 
 .friends__container {
+	background-color: rgb(13, 12, 19);
 	width: 87%;
 }
 
 .friends__nav {
 	margin: 10px auto;
-	background-color: rgb(80, 80, 80);
+	background-color: rgb(38, 38, 38);
 	width: 500px;
 	height: 40px;
 	border-radius: 10px;
@@ -289,7 +290,8 @@ body {
 	margin: 0 10px;
 	height: 30px;
 	width: 200px;
-	background-color: rgb(176, 176, 176);
+	/* background-color: rgb(176, 176, 176); */
+	background-color: white;
 	border-radius: 10px;
 	font-size: 16px;
 }
