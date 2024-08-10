@@ -54,6 +54,18 @@ export class UserService {
 		return user
 	}
 
+	async getUsersByIds(ids: number[]) {
+		const users: User[] = await this.userRepository.findAll({
+			where: {
+				id: ids,
+			},
+		})
+		if (users.length === 0) {
+			throw new NotFoundException('Users')
+		}
+		return users
+	}
+
 	async getUserByUsername(username: string) {
 		const user = await this.userRepository.findOne({
 			where: { username },

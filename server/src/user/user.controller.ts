@@ -37,6 +37,11 @@ export class UserController {
 		return this.userService.getUserById(id)
 	}
 
+	@Post('/ids')
+	async getUsersByIds(@Body() ids) {
+		return this.userService.getUsersByIds(ids.ids)
+	}
+
 	@Get('/username/:username')
 	async getUserByUsername(@Param('username') username: string) {
 		return this.userService.getUserByUsername(username)
