@@ -3,7 +3,6 @@
 	padding: 20px;
 	height: 650px;
 	width: 70%;
-	background-color: rgb(39, 39, 44);
 	border-radius: 40px;
 }
 
@@ -13,23 +12,25 @@
 	justify-content: space-around;
 	margin: 0 auto;
 	width: 90vh;
-	background-color: white;
-	padding: 5px 15px;
-	border-radius: 10px;
+	background-color: rgb(45, 45, 45);
+	padding: 5px 30px;
+	border-radius: 30px;
+	opacity: 0.9;
 }
 
 .search img {
+	cursor: pointer;
 	width: 30px;
 	height: 30px;
 }
 
 .search input {
-	color: black;
+	color: #fdfdfd;
 	font-size: 22px;
 	outline: none;
 	width: 580px;
 	border: none;
-	background-color: rgb(255, 255, 255);
+	background-color: rgb(45, 45, 45);
 	height: 35px;
 }
 
@@ -37,4 +38,9 @@
 	text-align: center;
 	margin-top: 40px;
 	color: rgb(255, 81, 81);
+}
+
+.users {
+	height: 550px;
+	overflow: scroll;
 }

@@ -131,7 +131,7 @@ export class UserService {
 		return createdUser
 	}
 
-	async giveRole(userId, dto: GiveRoleDto) {
+	async giveRole(userId: number, dto: GiveRoleDto) {
 		const user: User = await this.getUserById(userId)
 		const role = await this.roleService.getRoleByName(dto.roleName)
 		await user.$add('role', role.id)
