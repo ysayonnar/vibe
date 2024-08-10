@@ -118,7 +118,7 @@ export class FriendService {
 			include: { all: true },
 		})
 		const friends = await this.userRepository.findAll({
-			where: { id: user.friends.map(friend => friend.friendId) },
+			where: { id: foundedUser.friends.map(friend => friend.friendId) },
 		})
 		return friends
 	}

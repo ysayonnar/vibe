@@ -1,0 +1,50 @@
+.container {
+	width: 850px;
+	background-color: rgb(23, 23, 23);
+	color: white;
+	border-radius: 5px;
+	height: 200px;
+	margin: 10px auto;
+	display: flex;
+}
+
+.avatar {
+	width: 170px;
+	height: 170px;
+	border-radius: 50%;
+	border: 3px solid white;
+	margin: auto 20px;
+}
+.username {
+	color: rgb(43, 119, 226);
+	font-size: 26px;
+	margin-top: 30px;
+}
+
+.bio {
+	display: block;
+	width: 400px;
+}
+
+.btns {
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.btn {
+	margin: 10px 0;
+	cursor: pointer;
+	border: none;
+	border-radius: 10px;
+	color: white;
+	width: 120px;
+	height: 40px;
+	font-weight: bold;
+	font-size: 18px;
+	transition: all ease 0.2s;
+}
+
+.btn:hover {
+	scale: 1.05;
+}

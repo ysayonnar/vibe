@@ -59,6 +59,7 @@ export class UserService {
 			where: {
 				id: ids,
 			},
+			include: { all: true },
 		})
 		if (users.length === 0) {
 			throw new NotFoundException('Users')
