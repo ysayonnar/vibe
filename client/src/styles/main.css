@@ -231,6 +231,7 @@ body {
 }
 
 .user__settings__telegram__container {
+	width: 900px;
 	display: flex;
 }
 

@@ -68,7 +68,7 @@ const SideBar = () => {
 
 	return (
 		<div className={cl['sidebar__container']}>
-			<div className={cl.logo}>
+			<div onClick={() => router('/')} className={cl.logo}>
 				<h1>VIBE</h1>
 			</div>
 			<div className={cl['sidebar__user']}>
