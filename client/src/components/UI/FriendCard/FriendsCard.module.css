@@ -27,26 +27,21 @@
 }
 
 .btns {
-	margin: auto;
+	margin: 20px auto;
 	display: flex;
 	flex-direction: column;
 }
 
 .btn {
-	margin: 10px 0;
 	cursor: pointer;
 	border: none;
-	border-radius: 10px;
+	background-color: red;
 	color: white;
 	width: 120px;
 	height: 40px;
 	font-weight: bold;
 	font-size: 18px;
-	transition: all ease 0.2s;
-}
-
-.btn:hover {
-	scale: 1.05;
+	border-radius: 10px;
 }
 
 .btn:disabled {

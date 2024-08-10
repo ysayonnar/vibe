@@ -1,10 +1,14 @@
 import cl from './FriendRequestCard.module.css'
 import defUser from '../../../static/defUser.jpg'
 import axios from 'axios'
+import { useState } from 'react'
 
 const FriendRequestCard = ({ user, currentId }) => {
+	const [disabled, setDisabled] = useState(false)
+
 	async function accept(e) {
 		e.preventDefault()
+		setDisabled(true)
 		const id = user.sended_friend_requests.filter(
 			req => req.recipientId === currentId
 		)[0].id
@@ -20,6 +24,7 @@ const FriendRequestCard = ({ user, currentId }) => {
 
 	async function decline(e) {
 		e.preventDefault()
+		setDisabled(true)
 		const id = user.sended_friend_requests.filter(
 			req => req.recipientId === currentId
 		)[0].id
@@ -55,6 +60,7 @@ const FriendRequestCard = ({ user, currentId }) => {
 			</div>
 			<div className={cl.btns}>
 				<button
+					disabled={disabled}
 					style={{ backgroundColor: 'green' }}
 					className={cl.btn}
 					onClick={e => accept(e)}
@@ -62,6 +68,7 @@ const FriendRequestCard = ({ user, currentId }) => {
 					Accept
 				</button>
 				<button
+					disabled={disabled}
 					style={{ backgroundColor: 'red' }}
 					className={cl.btn}
 					onClick={e => decline(e)}

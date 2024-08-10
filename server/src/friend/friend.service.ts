@@ -101,6 +101,9 @@ export class FriendService {
 			where: { id: user.id },
 			include: { all: true },
 		})
+		if (foundedUser.sended_friend_requests.length === 0) {
+			throw new NotFoundException('Sended friend request')
+		}
 		return foundedUser.sended_friend_requests
 	}
 
@@ -109,6 +112,9 @@ export class FriendService {
 			where: { id: user.id },
 			include: { all: true },
 		})
+		if (foundedUser.friend_requests.length === 0) {
+			throw new NotFoundException('Friend request')
+		}
 		return foundedUser.friend_requests
 	}
 
