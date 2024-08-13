@@ -1,0 +1,40 @@
+.main {
+	height: 731px;
+	overflow: scroll;
+	width: 87%;
+	background: rgb(238, 174, 202);
+	background: radial-gradient(
+		circle,
+		rgba(238, 174, 202, 1) 0%,
+		rgba(148, 187, 233, 1) 100%
+	);
+}
+
+.error {
+	text-align: center;
+	margin: 300px 0;
+}
+
+.mapImage {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	height: 350px;
+	margin-top: 25px;
+}
+
+.mapImage img {
+	border-radius: 25px;
+}
+
+.map__container {
+	border-radius: 20px;
+	width: 400px;
+	height: 400px;
+}
+
+.map {
+	border-radius: 20px;
+	width: 400px;
+	height: 400px;
+}
