@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 .main {
-	height: 731px;
 	overflow: scroll;
+	height: 731px;
 	width: 87%;
 	background: rgb(238, 174, 202);
 	background: radial-gradient(
@@ -8,6 +10,7 @@
 		rgba(238, 174, 202, 1) 0%,
 		rgba(148, 187, 233, 1) 100%
 	);
+	font-family: 'Noto Sans', sans-serif;
 }
 
 .error {
@@ -30,11 +33,60 @@
 .map__container {
 	border-radius: 20px;
 	width: 400px;
-	height: 400px;
+	height: 350px;
 }
 
 .map {
 	border-radius: 20px;
 	width: 400px;
-	height: 400px;
+	height: 350px;
+}
+
+/* .info {
+	margin: 20px 80px;
+	width: 1000px;
+	height: 250px;
+	color: #ffffff;
+} */
+
+.info {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 20px;
+	margin: 20px auto;
+	width: 1000px;
+	height: 250px;
+	color: #ffffff;
+	background-color: rgba(255, 197, 255, 0.3);
+	border-radius: 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.mapButton {
+	cursor: pointer;
+	width: 170px;
+	height: 50px;
+	border: none;
+	border-radius: 10px;
+	background-color: white;
+}
+
+.mapButton h1 {
+	font-size: 17px;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: bold;
+	background: linear-gradient(
+		113deg,
+		rgba(238, 174, 208, 1) 0%,
+		rgba(157, 148, 233, 1) 100%
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.name {
+}
+
+.description {
 }
