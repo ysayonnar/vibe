@@ -7,6 +7,8 @@ import LoginFormPage from './pages/LoginFormPage'
 import UserSettingsPage from './pages/UserSettingsPage'
 import FriendsPage from './pages/FriendsPage'
 import PlacePage from './pages/PlacePage'
+import PlacesPage from './pages/PlacesPage'
+import PlaceCreate from './PlaceCreate/PlaceCreate'
 
 const Router = () => {
 	return (
@@ -21,6 +23,8 @@ const Router = () => {
 				<Route path='/friends' element={<FriendsPage />} />
 				<Route path='*' element={<h1>not found</h1>} />
 				<Route path='/place/:id' element={<PlacePage />} />
+				<Route path='/places' element={<PlacesPage />} />
+				<Route path='/placeCreate' element={<PlaceCreate />} />
 			</Routes>
 		</BrowserRouter>
 	)

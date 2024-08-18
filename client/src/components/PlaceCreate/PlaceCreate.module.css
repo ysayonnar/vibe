@@ -1,0 +1,54 @@
+.main {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.map__container {
+	border-radius: 20px;
+	width: 370px;
+	height: 200px;
+}
+
+.map {
+	border-radius: 20px;
+	width: 370px;
+	height: 200px;
+}
+
+.form_container {
+	display: flex;
+	width: 700px;
+	height: 700px;
+	background: rgb(20, 19, 19);
+	border-radius: 20px;
+}
+.form {
+	margin: 10px auto;
+}
+
+.dropArea {
+	color: white;
+	width: 380px;
+	height: 130px;
+	border: 5px dashed white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.def {
+	color: white;
+	width: 380px;
+	height: 130px;
+	border: 5px solid white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: bold;
+	font-size: 18px;
+}

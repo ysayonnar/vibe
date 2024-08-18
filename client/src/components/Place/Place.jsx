@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import ratingStar from '../../static/ratingStar.png'
 import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps'
+import Modal from '../UI/Modal/Modal'
 
 const Place = ({ id }) => {
 	const [place, setPlace] = useState({})
 	const [error, setError] = useState('')
+	const [isModal, setIsModal] = useState(false)
 
 	async function getPlaceById() {
 		await axios
@@ -23,14 +25,38 @@ const Place = ({ id }) => {
 		getPlaceById()
 	}, [])
 
-	console.log(place)
-
 	return (
 		<div className={cl.main}>
 			{error && <h1 className={cl.error}>{error}</h1>}
 			<div className={cl.mapImage}>
 				<img src={place && `http://localhost:5000/${place.image}`} alt='' />
-				{/* <YMaps>
+			</div>
+			<div className={cl.info}>
+				<div>
+					<h1 className={cl.name}>{place.name}</h1>
+					<p className={cl.description}>{place.description}</p>
+				</div>
+				<button
+					className={cl.mapButton}
+					onClick={e => {
+						e.preventDefault()
+						setIsModal(true)
+					}}
+				>
+					<h1>View on the map</h1>
+				</button>
+			</div>
+
+			<div className={cl.reviewsInfo}>
+				<h1 style={{ fontSize: '20px' }}>
+					Place created by <b>{place.user && place.user.username}</b>
+				</h1>
+			</div>
+
+			{/* пока оставлю, потом нужно будет сделать отображение категорий и в принципе всей остальной информации */}
+
+			<Modal isModal={isModal} setIsModal={setIsModal}>
+				<YMaps>
 					<div className={cl['map__container']}>
 						<Map
 							className={cl.map}
@@ -45,17 +71,8 @@ const Place = ({ id }) => {
 							/>
 						</Map>
 					</div>
-				</YMaps> сделать просмотр в модальном окне по нажатию кнопки view on the map */}
-			</div>
-			<div className={cl.info}>
-				<div>
-					<h1 className={cl.name}>{place.name}</h1>
-					<p className={cl.description}>{place.description}</p>
-				</div>
-				<button className={cl.mapButton}>
-					<h1>View on the map</h1>
-				</button>
-			</div>
+				</YMaps>
+			</Modal>
 		</div>
 	)
 }

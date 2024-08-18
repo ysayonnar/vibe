@@ -101,7 +101,6 @@ export class PlaceController {
 		@Body() categoriesId: number[],
 		@Req() req
 	) {
-		console.log('adad')
 		return this.placeService.setCategories(id, categoriesId, req.user)
 	}
 

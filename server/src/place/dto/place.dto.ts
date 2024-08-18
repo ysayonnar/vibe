@@ -1,10 +1,8 @@
 import { IsNumber, IsString, Length } from 'class-validator'
 
 export class PlaceCreationDto {
-	@IsNumber({}, { message: 'Must be an Integer' })
 	longtitude: number
 
-	@IsNumber({}, { message: 'Must be an Integer' })
 	width: number
 
 	@IsString({ message: 'Must be a string' })
