@@ -41,6 +41,10 @@ const PlaceCreate = () => {
 		e.preventDefault()
 		const formData = new FormData()
 		formData.append('image', file)
+		if (!file) {
+			setNameError('You need to add photo')
+			return
+		}
 		formData.append('longtitude', coords[0])
 		formData.append('width', coords[1])
 		formData.append('name', name)
@@ -53,8 +57,11 @@ const PlaceCreate = () => {
 				navigate('/map')
 			})
 			.catch(e => {
-				setNameError(e.response.data[0])
-				//тут сделать ошибки и их валидацию
+				if (e.response.data.message) {
+					setNameError(e.response.data.message)
+				} else {
+					setNameError('Form is incorrect')
+				}
 			})
 	}
 
@@ -64,7 +71,6 @@ const PlaceCreate = () => {
 				<form className={cl.form}>
 					<h1 style={{ textAlign: 'center', color: 'white' }}>Create Place</h1>
 					<FormInput
-						error={nameError}
 						text={'Name of the place'}
 						placeholder={'Name...'}
 						value={name}
@@ -125,6 +131,9 @@ const PlaceCreate = () => {
 							</Map>
 						</div>
 					</YMaps>
+					<h1 style={{ color: 'red', fontSize: '18px', textAlign: 'center' }}>
+						{nameError}
+					</h1>
 					<FormButton onClick={e => createPlace(e)}>Create</FormButton>
 				</form>
 			</div>
