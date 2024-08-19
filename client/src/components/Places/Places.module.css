@@ -1,0 +1,26 @@
+.main {
+	background: linear-gradient(
+		113deg,
+		rgba(238, 174, 208, 1) 0%,
+		rgba(157, 148, 233, 1) 100%
+	);
+	width: 100vw;
+	height: 100vh;
+}
+
+.page__title {
+	color: white;
+	text-align: center;
+	margin: 20px;
+}
+
+.grid__container {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 20px;
+	overflow: scroll;
+	width: 90%;
+	padding: 40px;
+	height: 650px;
+	margin: 0 auto;
+}

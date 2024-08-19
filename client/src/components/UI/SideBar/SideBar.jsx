@@ -24,7 +24,7 @@ const SideBar = () => {
 		},
 		{
 			src: place,
-			text: 'Places',
+			text: 'Your places',
 			href: '/places',
 		},
 		{

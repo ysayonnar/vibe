@@ -1,4 +1,4 @@
-import Places from '../Places'
+import Places from '../Places/Places'
 import SideBar from '../UI/SideBar/SideBar'
 
 const PlacesPage = () => {
