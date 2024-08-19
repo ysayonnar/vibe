@@ -14,7 +14,6 @@ const Places = () => {
 				headers: { authorization: `Bearer ${localStorage.getItem('auth')}` },
 			})
 			.then(res => {
-				console.log(res.data)
 				setUser(res.data)
 			})
 			.catch(e => {
@@ -30,7 +29,7 @@ const Places = () => {
 		<div className={cl.main}>
 			<div className={cl.header}>
 				<h1 className={cl['page__title']}>
-					{user['created_places'] ? 'Your places' : 'No places((('}
+					{user['created_places'] ? 'Your places' : 'No places'}
 				</h1>
 				<button
 					className={cl.createbtn}

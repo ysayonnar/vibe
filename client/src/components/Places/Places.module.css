@@ -1,24 +1,33 @@
 .main {
-	background: linear-gradient(
+	/* background: linear-gradient(
 		113deg,
 		rgba(238, 174, 208, 1) 0%,
 		rgba(157, 148, 233, 1) 100%
+	); */
+	background: rgb(112, 164, 255);
+	background: radial-gradient(
+		circle,
+		rgba(112, 164, 255, 1) 21%,
+		rgba(112, 164, 255, 1) 21%,
+		rgba(255, 255, 255, 1) 100%
 	);
 	width: 100vw;
 	height: 100vh;
 }
 
 .header {
-	width: 700px;
-	height: 80px;
+	background-color: white;
+	width: 600px;
+	height: 70px;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-	margin: 0 auto;
+	margin: 10px auto;
+	border-radius: 20px;
 }
 
 .page__title {
-	color: rgb(255, 255, 255);
+	color: black;
 }
 
 .createbtn {
@@ -38,7 +47,7 @@
 	grid-gap: 20px;
 	overflow: scroll;
 	scrollbar-width: none;
-	width: 90%;
+	width: 85%;
 	padding: 40px;
 	height: 650px;
 	margin: 0 auto;
