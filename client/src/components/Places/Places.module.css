@@ -8,10 +8,28 @@
 	height: 100vh;
 }
 
+.header {
+	width: 700px;
+	height: 80px;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin: 0 auto;
+}
+
 .page__title {
+	color: rgb(255, 255, 255);
+}
+
+.createbtn {
+	width: 150px;
+	height: 50px;
+	border: none;
+	background-color: rgb(13, 193, 13);
 	color: white;
-	text-align: center;
-	margin: 20px;
+	font-size: 18px;
+	font-weight: bold;
+	border-radius: 10px;
 }
 
 .grid__container {
@@ -19,6 +37,7 @@
 	grid-template-columns: repeat(2, 1fr);
 	grid-gap: 20px;
 	overflow: scroll;
+	scrollbar-width: none;
 	width: 90%;
 	padding: 40px;
 	height: 650px;
