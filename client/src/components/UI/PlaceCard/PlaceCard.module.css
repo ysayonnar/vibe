@@ -10,10 +10,12 @@
 .container {
 	width: 100%;
 	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .btns__container {
-	width: 95%;
+	width: 50%;
 	margin-left: 10px;
 	border-radius: 10px;
 	height: 140px;
@@ -21,7 +23,7 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-around;
-	padding: 5px 0;
+	padding: 3px 0;
 }
 
 .btn {
@@ -47,7 +49,8 @@
 
 .image img {
 	border-radius: 10px;
-	width: 250px;
+	max-width: 250px;
+	max-height: 140px;
 }
 
 .info {

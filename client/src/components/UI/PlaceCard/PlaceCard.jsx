@@ -1,9 +1,14 @@
 import cl from './PlaceCard.module.css'
 import ratingStar from '../../../static/ratingStar.png'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import Modal from '../../UI/Modal/Modal'
 
 const PlaceCard = ({ place }) => {
 	const navigate = useNavigate()
+	const [isCatsModal, setIsCatsModal] = useState(false)
+	const [isEditModal, setIsEditModal] = useState(false)
+	const [isDeleteModal, setIsDeleteModal] = useState(false)
 
 	return (
 		<div className={cl.card}>
@@ -12,9 +17,15 @@ const PlaceCard = ({ place }) => {
 					<img src={`http://localhost:5000/${place.image}`} alt='' />
 				</div>
 				<div className={cl['btns__container']}>
-					<button className={cl.btn}>Categories</button>
-					<button className={cl.btn}>Edit</button>
-					<button className={cl.btn}>Delete</button>
+					<button className={cl.btn} onClick={() => setIsCatsModal(true)}>
+						Categories
+					</button>
+					<button className={cl.btn} onClick={() => setIsEditModal(true)}>
+						Edit
+					</button>
+					<button className={cl.btn} onClick={() => setIsDeleteModal(true)}>
+						Delete
+					</button>
 				</div>
 			</div>
 			<div className={cl.info} onClick={() => navigate(`/place/${place.id}`)}>
@@ -31,6 +42,15 @@ const PlaceCard = ({ place }) => {
 					</h3>
 				</div>
 			</div>
+			<Modal isModal={isCatsModal} setIsModal={setIsCatsModal}>
+				Categories {place.id}
+			</Modal>
+			<Modal isModal={isDeleteModal} setIsModal={setIsDeleteModal}>
+				Delete {place.id}
+			</Modal>
+			<Modal isModal={isEditModal} setIsModal={setIsEditModal}>
+				Edit {place.id}
+			</Modal>
 		</div>
 	)
 }
