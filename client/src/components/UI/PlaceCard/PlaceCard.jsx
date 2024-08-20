@@ -3,12 +3,27 @@ import ratingStar from '../../../static/ratingStar.png'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import Modal from '../../UI/Modal/Modal'
+import axios from 'axios'
 
-const PlaceCard = ({ place }) => {
+const PlaceCard = ({ place, change, setChange }) => {
 	const navigate = useNavigate()
 	const [isCatsModal, setIsCatsModal] = useState(false)
 	const [isEditModal, setIsEditModal] = useState(false)
 	const [isDeleteModal, setIsDeleteModal] = useState(false)
+
+	async function deletePlace(e) {
+		e.preventDefault()
+		await axios
+			.delete(`http://localhost:5000/place/delete/${place.id}`, {
+				headers: { authorization: `Bearer ${localStorage.getItem('auth')}` },
+			})
+			.then(res => {
+				console.log(res)
+			})
+			.catch(e => console.log(e))
+		setIsDeleteModal(false)
+		setChange(!change)
+	}
 
 	return (
 		<div className={cl.card}>
@@ -46,7 +61,15 @@ const PlaceCard = ({ place }) => {
 				Categories {place.id}
 			</Modal>
 			<Modal isModal={isDeleteModal} setIsModal={setIsDeleteModal}>
-				Delete {place.id}
+				<div className={cl.delete}>
+					<h3>Are you sure you want to delete this place?</h3>
+					<button
+						onClick={e => deletePlace(e)}
+						className={cl['delete__button']}
+					>
+						Yes
+					</button>
+				</div>
 			</Modal>
 			<Modal isModal={isEditModal} setIsModal={setIsEditModal}>
 				Edit {place.id}

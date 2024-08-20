@@ -7,6 +7,7 @@ import axios from 'axios'
 const Places = () => {
 	const navigate = useNavigate()
 	const [user, setUser] = useState({})
+	const [change, setChange] = useState(false)
 
 	async function getUserInfo() {
 		await axios
@@ -23,7 +24,7 @@ const Places = () => {
 
 	useEffect(() => {
 		getUserInfo()
-	}, [])
+	}, [change])
 
 	return (
 		<div className={cl.main}>
@@ -41,7 +42,12 @@ const Places = () => {
 			{user['created_places'] && (
 				<div className={cl['grid__container']}>
 					{user['created_places'].map(place => (
-						<PlaceCard place={place} key={place.id} />
+						<PlaceCard
+							change={change}
+							setChange={setChange}
+							place={place}
+							key={place.id}
+						/>
 					))}
 				</div>
 			)}

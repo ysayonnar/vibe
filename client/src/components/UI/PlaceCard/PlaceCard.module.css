@@ -74,6 +74,8 @@
 }
 
 .description {
+	width: 450px;
+	overflow: hidden;
 	font-size: 14px;
 	font-weight: 500;
 }
@@ -88,4 +90,23 @@
 
 .rating__container img {
 	width: 22px;
+}
+
+.delete {
+	display: flex;
+	flex-direction: column;
+}
+
+.delete__button {
+	cursor: pointer;
+	background-color: red;
+	border: none;
+	margin: 0 auto;
+	margin-top: 30px;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+	border-radius: 5px;
+	width: 80px;
+	height: 40px;
 }
