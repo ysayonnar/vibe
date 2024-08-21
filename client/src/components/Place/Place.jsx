@@ -1,7 +1,6 @@
 import cl from './Place.module.css'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import ratingStar from '../../static/ratingStar.png'
 import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps'
 import Modal from '../UI/Modal/Modal'
 
@@ -9,6 +8,8 @@ const Place = ({ id }) => {
 	const [place, setPlace] = useState({})
 	const [error, setError] = useState('')
 	const [isModal, setIsModal] = useState(false)
+	const [user, setUser] = useState({})
+	const [changed, setChanged] = useState(false)
 
 	async function getPlaceById() {
 		await axios
@@ -21,10 +22,38 @@ const Place = ({ id }) => {
 			})
 	}
 
+	async function getUserInfo() {
+		await axios
+			.get('http://localhost:5000/auth/info', {
+				headers: { authorization: `Bearer ${localStorage.getItem('auth')}` },
+			})
+			.then(res => setUser(res.data))
+	}
+
+	async function handleFavourite(e) {
+		e.preventDefault()
+		const isFav =
+			place.favourite_users.filter(favUser => favUser.id === user.id).length ===
+			1
+		if (!isFav) {
+			await axios.post(
+				`http://localhost:5000/place/favourite/add/${place.id}`,
+				{},
+				{ headers: { authorization: `Bearer ${localStorage.getItem('auth')}` } }
+			)
+		} else {
+			await axios.delete(
+				`http://localhost:5000/place/favourite/delete/${place.id}`,
+				{ headers: { authorization: `Bearer ${localStorage.getItem('auth')}` } }
+			)
+		}
+		setChanged(!changed)
+	}
+
 	useEffect(() => {
 		getPlaceById()
-	}, [])
-
+		getUserInfo()
+	}, [changed])
 	return (
 		<div className={cl.main}>
 			{error && <h1 className={cl.error}>{error}</h1>}
@@ -47,13 +76,22 @@ const Place = ({ id }) => {
 				</button>
 			</div>
 
-			<div className={cl.reviewsInfo}>
-				<h1 style={{ fontSize: '20px' }}>
-					Place created by <b>{place.user && place.user.username}</b>
-				</h1>
+			<div className={cl.another__info}>
+				<div className={cl.fav__container}>
+					<button onClick={e => handleFavourite(e)} className={cl.mapButton}>
+						<h1>
+							{place.favourite_users.filter(favUser => favUser.id === user.id)
+								.length === 1
+								? 'Delete from favourite'
+								: 'Add to favourite'}
+						</h1>
+					</button>
+					<h2 className={cl.fav}>
+						{place.favourite_users && place.favourite_users.length} users added
+						to favourite
+					</h2>
+				</div>
 			</div>
-
-			{/* пока оставлю, потом нужно будет сделать отображение категорий и в принципе всей остальной информации */}
 
 			<Modal isModal={isModal} setIsModal={setIsModal}>
 				<YMaps>

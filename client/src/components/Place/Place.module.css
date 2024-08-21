@@ -4,11 +4,12 @@
 	overflow: scroll;
 	height: 731px;
 	width: 87%;
-	background: rgb(238, 174, 202);
-	background: radial-gradient(
-		circle,
-		rgba(238, 174, 202, 1) 0%,
-		rgba(148, 187, 233, 1) 100%
+	background: rgb(112, 164, 255);
+	background: linear-gradient(
+		166deg,
+		rgba(112, 164, 255, 1) 21%,
+		rgba(112, 164, 255, 1) 21%,
+		rgba(255, 255, 255, 1) 100%
 	);
 	font-family: 'Noto Sans', sans-serif;
 }
@@ -41,13 +42,6 @@
 	width: 400px;
 	height: 350px;
 }
-
-/* .info {
-	margin: 20px 80px;
-	width: 1000px;
-	height: 250px;
-	color: #ffffff;
-} */
 
 .info {
 	display: flex;
@@ -85,16 +79,25 @@
 	-webkit-text-fill-color: transparent;
 }
 
-.reviewsInfo {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+.another__info {
 	padding: 20px;
 	margin: 20px auto;
 	width: 1000px;
-	height: 250px;
+	height: 500px;
 	color: #ffffff;
-	background-color: rgba(255, 197, 255, 0.3);
+	color: rgb(255, 255, 255);
+	background-color: rgba(255, 228, 255, 0.3);
 	border-radius: 20px;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.fav {
+	font-size: 20px;
+}
+
+.fav__container {
+	display: flex;
+	align-items: center;
+	width: 450px;
+	justify-content: space-between;
 }

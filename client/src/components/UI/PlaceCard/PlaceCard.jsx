@@ -117,6 +117,7 @@ const PlaceCard = ({ place, change, setChange }) => {
 				<h4 className={cl.description}>
 					{place.description.slice(0, 100) + '...'}
 				</h4>
+
 				<div className={cl['rating__container']}>
 					<img src={ratingStar} alt='' />
 					<h3>
