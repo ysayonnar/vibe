@@ -110,3 +110,50 @@
 	width: 80px;
 	height: 40px;
 }
+
+.editTitle {
+	text-align: center;
+}
+
+.editForm {
+	width: 300px;
+	display: flex;
+	flex-direction: column;
+}
+
+.customInput {
+	border: none;
+	border-radius: 5px 5px 0 0;
+	/* border-radius: 5px; */
+	width: 300px;
+	height: 40px;
+	margin: 5px 0;
+	background-color: #d6ebff;
+	padding: 0 10px;
+	font-size: 16px;
+}
+
+.customInput:focus {
+	outline: none;
+	background-color: #bfe1ff;
+	border-bottom: 3px solid rgb(78, 110, 255);
+}
+
+.sendBtn {
+	width: 40%;
+	margin: 10px auto;
+	height: 30px;
+	border: none;
+	background-color: blue;
+	color: white;
+	font-weight: bold;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.editError {
+	text-align: center;
+	color: red;
+	font-size: 16px;
+}

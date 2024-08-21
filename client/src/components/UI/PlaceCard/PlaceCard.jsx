@@ -10,6 +10,9 @@ const PlaceCard = ({ place, change, setChange }) => {
 	const [isCatsModal, setIsCatsModal] = useState(false)
 	const [isEditModal, setIsEditModal] = useState(false)
 	const [isDeleteModal, setIsDeleteModal] = useState(false)
+	const [name, setName] = useState('')
+	const [description, setDescription] = useState('')
+	const [editError, setEditError] = useState('')
 
 	async function deletePlace(e) {
 		e.preventDefault()
@@ -22,6 +25,29 @@ const PlaceCard = ({ place, change, setChange }) => {
 			})
 			.catch(e => console.log(e))
 		setIsDeleteModal(false)
+		setChange(!change)
+	}
+
+	async function changePlace(e) {
+		e.preventDefault()
+		await axios
+			.put(
+				`http://localhost:5000/place/update/${place.id}`,
+				{
+					name,
+					description,
+				},
+				{ headers: { authorization: `Bearer ${localStorage.getItem('auth')}` } }
+			)
+			.then(res => {
+				setIsEditModal(false)
+				setName('')
+				setDescription('')
+				setEditError('')
+			})
+			.catch(e => {
+				setEditError('Invalid input')
+			})
 		setChange(!change)
 	}
 
@@ -72,7 +98,27 @@ const PlaceCard = ({ place, change, setChange }) => {
 				</div>
 			</Modal>
 			<Modal isModal={isEditModal} setIsModal={setIsEditModal}>
-				Edit {place.id}
+				<h1 className={cl.editTitle}>Edit</h1>
+				<form className={cl.editForm}>
+					<input
+						type='text'
+						className={cl.customInput}
+						placeholder='Name...'
+						value={name}
+						onChange={e => setName(e.target.value)}
+					/>
+					<input
+						type='text'
+						className={cl.customInput}
+						placeholder='Description...'
+						value={description}
+						onChange={e => setDescription(e.target.value)}
+					/>
+					<h1 className={cl.editError}>{editError}</h1>
+					<button className={cl.sendBtn} onClick={e => changePlace(e)}>
+						Change
+					</button>
+				</form>
 			</Modal>
 		</div>
 	)
