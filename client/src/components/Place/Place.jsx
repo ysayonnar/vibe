@@ -5,7 +5,7 @@ import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps'
 import Modal from '../UI/Modal/Modal'
 
 const Place = ({ id }) => {
-	const [place, setPlace] = useState({})
+	const [place, setPlace] = useState({ categories: [], favourite_users: [] })
 	const [error, setError] = useState('')
 	const [isModal, setIsModal] = useState(false)
 	const [user, setUser] = useState({})
@@ -90,6 +90,12 @@ const Place = ({ id }) => {
 						{place.favourite_users && place.favourite_users.length} users added
 						to favourite
 					</h2>
+				</div>
+				<div className={cl.categories__container}>
+					{place.categories &&
+						place.categories.map(category => (
+							<div className={cl.category}>{category.name}</div>
+						))}
 				</div>
 			</div>
 

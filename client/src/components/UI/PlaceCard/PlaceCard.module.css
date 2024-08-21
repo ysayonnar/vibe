@@ -170,6 +170,7 @@
 }
 
 .allCats {
+	overflow: scroll;
 	padding: 10px;
 	background-color: #dddddd;
 	border-radius: 10px;
