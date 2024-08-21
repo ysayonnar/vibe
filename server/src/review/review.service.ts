@@ -60,12 +60,13 @@ export class ReviewService {
 		if (candidate) {
 			throw new HttpException(
 				'You cant create more than one review for this place',
-				HttpStatus.BAD_REQUEST
+				HttpStatus.BAD_GATEWAY
 			)
 		}
 		const createdReview = await this.reviewRepository.create({
 			...dto,
 			userId: user.id,
+			placeId: placeId,
 		})
 		await this.calculateRating(placeId)
 		return createdReview

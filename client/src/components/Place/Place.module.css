@@ -83,7 +83,7 @@
 	padding: 20px;
 	margin: 20px auto;
 	width: 1000px;
-	height: 210px;
+	height: 240px;
 	color: #ffffff;
 	color: rgb(255, 255, 255);
 	background-color: rgba(255, 228, 255, 0.1);
@@ -100,13 +100,14 @@
 	align-items: center;
 	width: 450px;
 	justify-content: space-between;
+	margin-bottom: 20px;
 }
 
 .categories__container {
 	width: 35%;
 	height: 100px;
 	background-color: rgba(255, 255, 255, 0.674);
-	margin: 20px 0;
+	margin: 10px 0;
 	border-radius: 10px;
 	overflow: scroll;
 	display: flex;
@@ -123,4 +124,83 @@
 	font-weight: bold;
 	border-radius: 5px;
 	line-height: 30px;
+}
+
+.reviews__block {
+	padding: 20px;
+	margin: 20px auto;
+	width: 1000px;
+	height: 600px;
+	color: #ffffff;
+	background-color: rgb(172, 211, 255);
+	border-radius: 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.review__form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 10px auto;
+	width: 400px;
+	max-height: 500px;
+	/* height: 230px; */
+	background-color: rgb(152, 200, 255);
+	border-radius: 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	padding: 10px 0;
+}
+
+.review__input {
+	width: 80%;
+	border: none;
+	margin: 8px auto;
+	height: 40px;
+	padding: 0 10px;
+	font-size: 16px;
+	border-radius: 5px;
+	transition: all ease 0.05s;
+}
+
+.review__input:focus {
+	border-bottom: 3px solid rgb(94, 94, 255);
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	outline: none;
+}
+
+.reviewBtn {
+	cursor: pointer;
+	width: 100px;
+	height: 40px;
+	border: none;
+	background-color: blue;
+	color: white;
+	border-radius: 10px;
+	font-weight: bold;
+	font-size: 16px;
+	transition: all ease 0.3s;
+}
+
+.reviewBtn:hover {
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.starsBar {
+	background-color: white;
+	height: 30px;
+	padding: 5px;
+	border-radius: 5px;
+	margin: 10px;
+}
+
+.star {
+	cursor: pointer;
+	width: 20px;
+	margin: auto 2px;
+}
+
+.reviewError {
+	text-align: center;
+	font-size: 18px;
+	margin-bottom: 2px;
 }
