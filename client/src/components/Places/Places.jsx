@@ -6,16 +6,16 @@ import axios from 'axios'
 
 const Places = () => {
 	const navigate = useNavigate()
-	const [user, setUser] = useState({})
+	const [places, setPlaces] = useState([])
 	const [change, setChange] = useState(false)
 
 	async function getUserInfo() {
 		await axios
-			.get('http://localhost:5000/auth/info', {
+			.get('http://localhost:5000/place/current', {
 				headers: { authorization: `Bearer ${localStorage.getItem('auth')}` },
 			})
 			.then(res => {
-				setUser(res.data)
+				setPlaces(res.data)
 			})
 			.catch(e => {
 				console.log(e.response.data)
@@ -30,7 +30,7 @@ const Places = () => {
 		<div className={cl.main}>
 			<div className={cl.header}>
 				<h1 className={cl['page__title']}>
-					{user['created_places'] ? 'Your places' : 'No places'}
+					{places.length ? 'Your places' : 'No places'}
 				</h1>
 				<button
 					className={cl.createbtn}
@@ -39,9 +39,9 @@ const Places = () => {
 					Create place
 				</button>
 			</div>
-			{user['created_places'] && (
+			{places.length && (
 				<div className={cl['grid__container']}>
-					{user['created_places'].map(place => (
+					{places.map(place => (
 						<PlaceCard
 							change={change}
 							setChange={setChange}

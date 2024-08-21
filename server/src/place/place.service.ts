@@ -53,6 +53,17 @@ export class PlaceService {
 		return places
 	}
 
+	async getAllUserPlaces(user) {
+		const places = await this.PlaceRepository.findAll({
+			where: {
+				userId: user.id,
+			},
+			include: { all: true },
+		})
+
+		return places
+	}
+
 	async getPlaceById(id: number) {
 		const place = await this.PlaceRepository.findByPk(id, {
 			include: { all: true },

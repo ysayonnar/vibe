@@ -157,3 +157,72 @@
 	color: red;
 	font-size: 16px;
 }
+
+.cats {
+	width: 500px;
+	height: 400px;
+	display: flex;
+	flex-direction: column;
+}
+
+.catsTitle {
+	font-size: 18px;
+}
+
+.allCats {
+	padding: 10px;
+	background-color: #dddddd;
+	border-radius: 10px;
+	margin: 10px;
+	height: 40%;
+	width: 95%;
+}
+
+.placeCats {
+	overflow: scroll;
+	background-color: #dddddd;
+	border-radius: 10px;
+	padding: 10px;
+	height: 40%;
+	width: 95%;
+	margin: 10px;
+}
+
+.possibleCat {
+	overflow: scroll;
+	cursor: pointer;
+	width: 100px;
+	background-color: rgb(27, 201, 27);
+	margin: 5px;
+	height: 30px;
+	text-align: center;
+	color: white;
+	font-weight: bold;
+	border-radius: 5px;
+	line-height: 30px;
+}
+
+.saveCatsBtn {
+	cursor: pointer;
+	border: none;
+	background-color: rgb(18, 213, 18);
+	color: white;
+	width: 100px;
+	height: 40px;
+	font-weight: bold;
+	font-size: 16px;
+	margin: 0 auto;
+	border-radius: 10px;
+	transition: all ease 0.4s;
+}
+
+.saveCatsBtn:hover {
+	background-color: rgb(89, 255, 60);
+	scale: 1.1;
+}
+
+.catsError {
+	color: red;
+	text-align: center;
+	margin-top: 5px;
+}

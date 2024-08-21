@@ -30,6 +30,12 @@ export class PlaceController {
 		return this.placeService.getAllPlaces()
 	}
 
+	@UseGuards(JwtAuthGuard)
+	@Get('/current')
+	async getAllUserPlaces(@Req() req) {
+		return this.placeService.getAllUserPlaces(req.user)
+	}
+
 	@Get('/byid/:id')
 	async getPlaceById(@Param('id') id: number) {
 		return this.placeService.getPlaceById(id)

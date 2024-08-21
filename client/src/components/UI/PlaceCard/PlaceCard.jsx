@@ -1,7 +1,7 @@
 import cl from './PlaceCard.module.css'
 import ratingStar from '../../../static/ratingStar.png'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Modal from '../../UI/Modal/Modal'
 import axios from 'axios'
 
@@ -13,6 +13,15 @@ const PlaceCard = ({ place, change, setChange }) => {
 	const [name, setName] = useState('')
 	const [description, setDescription] = useState('')
 	const [editError, setEditError] = useState('')
+	const [categories, setCategories] = useState([])
+	const [placeCategories, setPlaceCategories] = useState(place.categories)
+	const [categoriesError, setCategoriesError] = useState('')
+
+	async function getCategories() {
+		await axios.get('http://localhost:5000/category/').then(res => {
+			setCategories(res.data)
+		})
+	}
 
 	async function deletePlace(e) {
 		e.preventDefault()
@@ -20,9 +29,7 @@ const PlaceCard = ({ place, change, setChange }) => {
 			.delete(`http://localhost:5000/place/delete/${place.id}`, {
 				headers: { authorization: `Bearer ${localStorage.getItem('auth')}` },
 			})
-			.then(res => {
-				console.log(res)
-			})
+			.then(res => {})
 			.catch(e => console.log(e))
 		setIsDeleteModal(false)
 		setChange(!change)
@@ -50,6 +57,42 @@ const PlaceCard = ({ place, change, setChange }) => {
 			})
 		setChange(!change)
 	}
+
+	function addCategory(e, cat) {
+		e.preventDefault()
+		setPlaceCategories([...placeCategories, cat])
+	}
+
+	function deleteCategory(e, cat) {
+		e.preventDefault()
+		const payload = placeCategories.filter(
+			placeCategory => placeCategory.id !== cat.id
+		)
+		setPlaceCategories(payload)
+	}
+
+	async function saveCategories(e) {
+		e.preventDefault()
+		const categoriesIds = placeCategories.map(cat => cat.id)
+		await axios
+			.put(
+				`http://localhost:5000/place/setCategories/${place.id}`,
+				categoriesIds,
+				{ headers: { authorization: `Bearer ${localStorage.getItem('auth')}` } }
+			)
+			.then(res => {
+				setCategoriesError('')
+				setChange(!change)
+				setIsCatsModal(false)
+			})
+			.catch(e => {
+				setCategoriesError('Something went wrong')
+			})
+	}
+
+	useEffect(() => {
+		getCategories()
+	}, [])
 
 	return (
 		<div className={cl.card}>
@@ -84,7 +127,49 @@ const PlaceCard = ({ place, change, setChange }) => {
 				</div>
 			</div>
 			<Modal isModal={isCatsModal} setIsModal={setIsCatsModal}>
-				Categories {place.id}
+				<div className={cl.cats}>
+					<h1 className={cl.catsTitle}>Click on a category to add it</h1>
+					<div className={cl.allCats}>
+						<h1 style={{ fontSize: '16px', color: 'green' }}>
+							All categories:
+						</h1>
+						<div style={{ display: 'flex' }}>
+							{categories.map(cat => {
+								if (placeCategories.some(placeCat => placeCat.id === cat.id)) {
+									return
+								} else {
+									return (
+										<div
+											onClick={e => addCategory(e, cat)}
+											className={cl.possibleCat}
+										>
+											{cat.name}
+										</div>
+									)
+								}
+							})}
+						</div>
+					</div>
+					<div className={cl.placeCats}>
+						<h1 style={{ fontSize: '16px', color: 'green' }}>
+							Place categories:
+						</h1>
+						<div style={{ display: 'flex' }}>
+							{placeCategories.map(cat => (
+								<div
+									onClick={e => deleteCategory(e, cat)}
+									className={cl.possibleCat}
+								>
+									{cat.name}
+								</div>
+							))}
+						</div>
+					</div>
+					<button onClick={e => saveCategories(e)} className={cl.saveCatsBtn}>
+						Save
+					</button>
+					<h3 className={cl.catsError}>{categoriesError}</h3>
+				</div>
 			</Modal>
 			<Modal isModal={isDeleteModal} setIsModal={setIsDeleteModal}>
 				<div className={cl.delete}>
