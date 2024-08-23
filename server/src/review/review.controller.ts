@@ -29,6 +29,11 @@ export class ReviewController {
 		return this.reviewService.getReviewById(id)
 	}
 
+	@Get('/byPlaceId/:id')
+	async getReviewsByPlaceId(@Param('id') id: number) {
+		return this.reviewService.getReviewsByPlaceId(id)
+	}
+
 	@UsePipes(ValidationPipe)
 	@UseGuards(JwtAuthGuard)
 	@Post('/create/:id')

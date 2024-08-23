@@ -37,6 +37,16 @@ export class ReviewService {
 		return review
 	}
 
+	async getReviewsByPlaceId(id: number) {
+		const reviews = await this.reviewRepository.findAll({
+			where: {
+				placeId: id,
+			},
+			include: { all: true },
+		})
+		return reviews
+	}
+
 	async getAllReviews() {
 		const reviews = await this.reviewRepository.findAll({
 			include: { all: true },

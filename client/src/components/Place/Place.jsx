@@ -5,9 +5,16 @@ import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps'
 import Modal from '../UI/Modal/Modal'
 import emptyStar from '../../static/emptyStar.png'
 import fullStar from '../../static/fullStar.png'
+import ratingStar from '../../static/ratingStar.png'
 
 const Place = ({ id }) => {
-	const [place, setPlace] = useState({ categories: [], favourite_users: [] })
+	const [place, setPlace] = useState({
+		categories: [],
+		favourite_users: [],
+		name: '',
+		description: '',
+	})
+	const [reviews, setReviews] = useState([])
 	const [error, setError] = useState('')
 	const [isModal, setIsModal] = useState(false)
 	const [user, setUser] = useState({})
@@ -65,6 +72,17 @@ const Place = ({ id }) => {
 		setChanged(!changed)
 	}
 
+	async function getReviews() {
+		await axios
+			.get(`http://localhost:5000/review/byPlaceId/${id}`)
+			.then(res => {
+				setReviews(res.data)
+			})
+			.catch(e => {
+				console.log(e)
+			})
+	}
+
 	function handleStar(index) {
 		let payload = []
 		for (let i = 0; i < 5; i++) {
@@ -88,65 +106,102 @@ const Place = ({ id }) => {
 			.post(`http://localhost:5000/review/create/${place.id}`, reviewData, {
 				headers: { authorization: `Bearer ${localStorage.getItem('auth')}` },
 			})
-			.then(res => setReviewError('Sended!'))
+			.then(res => {
+				setReviewError('Sended!')
+				setChanged(!changed)
+			})
 			.catch(e => {
 				setReviewError(e.response.data.message)
 			})
 	}
 
+	function calculateStars(grade) {
+		let stars = []
+		for (let i = 0; i < 5; i++) {
+			if (i < grade) {
+				stars.push(fullStar)
+			} else {
+				stars.push(emptyStar)
+			}
+		}
+		return stars
+	}
+
 	useEffect(() => {
 		getPlaceById()
 		getUserInfo()
+		getReviews()
 	}, [changed])
+
 	return (
 		<div className={cl.main}>
 			{error && <h1 className={cl.error}>{error}</h1>}
-			<div className={cl.mapImage}>
-				<img src={place && `http://localhost:5000/${place.image}`} alt='' />
-			</div>
-			<div className={cl.info}>
-				<div>
-					<h1 className={cl.name}>{place.name}</h1>
-					<p className={cl.description}>{place.description}</p>
+			<div style={{ display: 'flex' }}>
+				<div className={cl.mapImage}>
+					<img src={place && `http://localhost:5000/${place.image}`} alt='' />
 				</div>
-				<button
-					className={cl.mapButton}
-					onClick={e => {
-						e.preventDefault()
-						setIsModal(true)
-					}}
-				>
-					<h1>View on the map</h1>
-				</button>
-			</div>
-
-			<div className={cl.another__info}>
-				<div className={cl.fav__container}>
-					<button onClick={e => handleFavourite(e)} className={cl.mapButton}>
-						<h1>
-							{place.favourite_users.filter(favUser => favUser.id === user.id)
-								.length === 1
-								? 'Delete from favourite'
-								: 'Add to favourite'}
-						</h1>
-					</button>
-					<h2 className={cl.fav}>
-						{place.favourite_users && place.favourite_users.length} users added
-						to favourite
-					</h2>
-				</div>
-				<h3>Categories:</h3>
-				<div className={cl.categories__container}>
-					{place.categories &&
-						place.categories.map(category => (
-							<div className={cl.category}>{category.name}</div>
-						))}
+				<div className={cl.info}>
+					<div>
+						<h1 className={cl.name}>{place.name.slice(0, 20)}</h1>
+						<i className={cl.description}>
+							{place.description.slice(0, 400) + '...'}
+						</i>
+					</div>
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							width: '450px',
+							justifyContent: 'space-between',
+						}}
+					>
+						<h3>Categories:</h3>
+						<div className={cl.categories__container}>
+							{place.categories &&
+								place.categories.map(category => (
+									<div className={cl.category}>{category.name}</div>
+								))}
+						</div>
+					</div>
+					<div className={cl.button__container}>
+						<button
+							className={cl.mapButton}
+							onClick={e => {
+								e.preventDefault()
+								setIsModal(true)
+							}}
+						>
+							<h1>View on the map</h1>
+						</button>
+						<button onClick={e => handleFavourite(e)} className={cl.mapButton}>
+							<h1>
+								{place.favourite_users.filter(favUser => favUser.id === user.id)
+									.length === 1
+									? 'Delete from favourite'
+									: 'Add to favourite'}
+							</h1>
+						</button>
+					</div>
+					<div className={cl.another__info}>
+						<p className={cl.fav}>
+							{place.favourite_users && place.favourite_users.length} users
+							added to favourite
+						</p>
+						<div className={cl.rating}>
+							<img src={ratingStar} alt='Rating: ' />
+							<h1>
+								{place.calculatedRating === 0
+									? 0
+									: Math.round(place.calculatedRating * 10) / 10}
+							</h1>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<div className={cl.reviews__block}>
-				<h1 style={{ textAlign: 'center' }}>Send review</h1>
 				<form className={cl.review__form}>
+					<h1 style={{ textAlign: 'center' }}>Send review</h1>
 					<input
 						type='text'
 						className={cl.review__input}
@@ -180,7 +235,41 @@ const Place = ({ id }) => {
 						Send
 					</button>
 				</form>
-				{/* <h1>Rating: {place.calculatedRating}</h1> */}
+
+				<div className={cl.reviews__container}>
+					<h1 className={cl.reviews__title}>Reviews</h1>
+					<div className={cl.reviews}>
+						{reviews.map(review => {
+							return (
+								<>
+									<div className={cl.review}>
+										<div
+											style={{
+												margin: '5px',
+												display: 'flex',
+												width: '100%',
+												justifyContent: 'space-around',
+											}}
+										>
+											<i className={cl.review__created}>
+												User: {review.user.username}
+											</i>
+											<div className={cl.review__stars}>
+												{calculateStars(review.grade).map(star => (
+													<img src={star} alt='' />
+												))}
+											</div>
+										</div>
+										<h1 className={cl.review__title}>{review.title}</h1>
+										<h4 className={cl.review__description}>
+											{review.description.slice(0, 100) + '...'}
+										</h4>
+									</div>
+								</>
+							)
+						})}
+					</div>
+				</div>
 			</div>
 
 			<Modal isModal={isModal} setIsModal={setIsModal}>

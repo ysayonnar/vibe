@@ -35,6 +35,7 @@ const PlaceCreate = () => {
 		} else {
 			setFile(file[0])
 		}
+		setDrag(false)
 	}
 
 	async function createPlace(e) {

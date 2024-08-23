@@ -4,31 +4,33 @@
 	overflow: scroll;
 	height: 731px;
 	width: 87%;
-	background: rgb(112, 164, 255);
-	background: linear-gradient(
-		166deg,
-		rgba(112, 164, 255, 1) 21%,
-		rgba(112, 164, 255, 1) 21%,
-		rgba(255, 255, 255, 1) 100%
-	);
+
+	background-color: whitesmoke;
 	font-family: 'Noto Sans', sans-serif;
 }
 
 .error {
 	text-align: center;
+	color: black;
 	margin: 300px 0;
 }
 
 .mapImage {
-	width: 100%;
+	width: 800px;
 	display: flex;
-	justify-content: space-around;
-	height: 350px;
-	margin-top: 25px;
+	height: 450px;
+	align-items: center;
+	justify-content: center;
 }
 
 .mapImage img {
-	border-radius: 25px;
+	width: 700px;
+	border-radius: 10px;
+	transition: all ease 0.3s;
+}
+
+.mapImage img:hover {
+	scale: 1.03;
 }
 
 .map__container {
@@ -44,26 +46,29 @@
 }
 
 .info {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	padding: 20px;
-	margin: 20px auto;
-	width: 1000px;
-	height: 250px;
-	color: #ffffff;
-	background-color: rgba(255, 197, 255, 0.3);
-	border-radius: 20px;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	margin-top: 20px;
+	width: 500px;
+	height: 400px;
+}
+
+.name {
+	margin-bottom: 10px;
 }
 
 .mapButton {
+	border: none;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	cursor: pointer;
 	width: 170px;
 	height: 50px;
-	border: none;
 	border-radius: 10px;
 	background-color: white;
+	margin-top: 10px;
+	transition: all ease 0.2s;
+}
+
+.mapButton:hover {
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .mapButton h1 {
@@ -79,18 +84,6 @@
 	-webkit-text-fill-color: transparent;
 }
 
-.another__info {
-	padding: 20px;
-	margin: 20px auto;
-	width: 1000px;
-	height: 240px;
-	color: #ffffff;
-	color: rgb(255, 255, 255);
-	background-color: rgba(255, 228, 255, 0.1);
-	border-radius: 20px;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
 .fav {
 	font-size: 20px;
 }
@@ -104,9 +97,9 @@
 }
 
 .categories__container {
-	width: 35%;
-	height: 100px;
-	background-color: rgba(255, 255, 255, 0.674);
+	width: 330px;
+	/* background-color: red; */
+	height: 40px;
 	margin: 10px 0;
 	border-radius: 10px;
 	overflow: scroll;
@@ -116,7 +109,7 @@
 .category {
 	cursor: pointer;
 	width: 100px;
-	background-color: #8138ff;
+	background-color: rgb(0, 206, 0);
 	margin: 5px;
 	height: 30px;
 	text-align: center;
@@ -126,32 +119,60 @@
 	line-height: 30px;
 }
 
+.button__container {
+	width: 75%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.another__info {
+	margin-top: 20px;
+}
+
+.rating {
+	width: 55px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.rating img {
+	width: 25px;
+	height: 25px;
+}
+
+.rating h1 {
+	font-weight: 500;
+	font-size: 26px;
+}
+
 .reviews__block {
+	display: flex;
+	justify-content: space-around;
 	padding: 20px;
 	margin: 20px auto;
-	width: 1000px;
-	height: 600px;
-	color: #ffffff;
-	background-color: rgb(172, 211, 255);
+	width: 80%;
+	height: 400px;
+	color: black;
 	border-radius: 20px;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .review__form {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin: 10px auto;
+	margin: 10px;
 	width: 400px;
 	max-height: 500px;
-	/* height: 230px; */
-	background-color: rgb(152, 200, 255);
+	height: 300px;
+	background-color: white;
 	border-radius: 20px;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	padding: 10px 0;
 }
 
 .review__input {
+	background-color: rgb(241, 241, 241);
 	width: 80%;
 	border: none;
 	margin: 8px auto;
@@ -203,4 +224,59 @@
 	text-align: center;
 	font-size: 18px;
 	margin-bottom: 2px;
+}
+
+.reviews__container {
+	margin: 10px;
+	width: 400px;
+	height: 300px;
+	background-color: white;
+	border-radius: 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.reviews__title {
+	text-align: center;
+}
+
+.reviews {
+	margin: 0 auto;
+	height: 250px;
+	width: 98%;
+	overflow: scroll;
+}
+
+.review {
+	height: 150px;
+	margin: 10px;
+	width: 95%;
+	background-color: rgb(244, 244, 244);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.19);
+	border-radius: 10px;
+	padding: 2px;
+}
+
+.review__stars {
+	width: 100px;
+	height: 20px;
+}
+
+.review__stars img {
+	width: 20px;
+}
+
+.review__created {
+	font-size: 18px;
+}
+
+.review__title {
+	font-size: 20px;
+	width: 90%;
+	margin: 0 auto;
+}
+
+.review__description {
+	margin: 0 auto;
+	width: 90%;
+	font-size: 14px;
 }
