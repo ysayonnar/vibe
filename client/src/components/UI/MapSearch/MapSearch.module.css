@@ -1,0 +1,16 @@
+.main {
+	background-color: black;
+	width: 330px;
+	padding: 0 20px;
+}
+
+.title {
+	color: white;
+	text-align: center;
+	margin: 10px;
+}
+
+.counter {
+	color: white;
+	text-align: center;
+}

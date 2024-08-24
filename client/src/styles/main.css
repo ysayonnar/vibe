@@ -14,14 +14,16 @@ body {
 .container {
 	display: flex;
 	justify-content: space-between;
+	width: 1536px;
 }
 
 .map__container {
-	width: 1332px;
+	width: 1000px;
+	height: 730px;
 }
 
 .map {
-	width: 100%;
+	width: 1000px;
 	height: 100%;
 }
 
