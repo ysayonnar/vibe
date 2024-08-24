@@ -1,0 +1,260 @@
+.main {
+	background: rgb(112, 164, 255);
+	background: radial-gradient(
+		circle,
+		rgba(112, 164, 255, 1) 21%,
+		rgba(112, 164, 255, 1) 21%,
+		rgba(255, 255, 255, 1) 100%
+	);
+	width: 100vw;
+	height: 100vh;
+}
+
+.page__title {
+	background-color: white;
+	width: 350px;
+	text-align: center;
+	height: 50px;
+	line-height: 50px;
+	margin: 20px auto;
+	border-radius: 10px;
+}
+
+.favourite__container {
+	width: 45%;
+	height: 630px;
+	margin: 0 auto;
+	overflow: scroll;
+	scrollbar-width: none;
+}
+
+.card {
+	margin: 10px auto;
+	width: 530px;
+	height: 300px;
+	padding: 20px;
+	background-color: white;
+	border-radius: 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.container {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.btns__container {
+	width: 50%;
+	margin-left: 10px;
+	border-radius: 10px;
+	height: 140px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+	padding: 3px 0;
+}
+
+.btn {
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: bold;
+	color: rgb(26, 26, 26);
+	width: 215px;
+	height: 40px;
+	border: none;
+	border-radius: 5px;
+	background-color: rgb(237, 237, 255);
+	transition: all ease 0.3s;
+}
+
+.btn:hover {
+	background-color: #acd4fd;
+}
+
+.image {
+	width: 260px;
+}
+
+.image img {
+	border-radius: 10px;
+	max-width: 250px;
+	max-height: 140px;
+}
+
+.info {
+	cursor: pointer;
+	background-color: #ebf5ff;
+	width: 100%;
+	height: 115px;
+	margin: 0 auto;
+	margin-top: 5px;
+	border-radius: 10px;
+	padding: 3px 10px;
+	transition: all ease 0.05s;
+}
+
+.info:hover {
+	scale: 1.01;
+}
+
+.title {
+	font-size: 22px;
+}
+
+.description {
+	width: 450px;
+	overflow: hidden;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.rating__container {
+	margin-top: 20px;
+	width: 55px;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.rating__container img {
+	width: 22px;
+}
+
+.delete {
+	display: flex;
+	flex-direction: column;
+}
+
+.delete__button {
+	cursor: pointer;
+	background-color: red;
+	border: none;
+	margin: 0 auto;
+	margin-top: 30px;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+	border-radius: 5px;
+	width: 80px;
+	height: 40px;
+}
+
+.editTitle {
+	text-align: center;
+}
+
+.editForm {
+	width: 300px;
+	display: flex;
+	flex-direction: column;
+}
+
+.customInput {
+	border: none;
+	border-radius: 5px 5px 0 0;
+	/* border-radius: 5px; */
+	width: 300px;
+	height: 40px;
+	margin: 5px 0;
+	background-color: #d6ebff;
+	padding: 0 10px;
+	font-size: 16px;
+}
+
+.customInput:focus {
+	outline: none;
+	background-color: #bfe1ff;
+	border-bottom: 3px solid rgb(78, 110, 255);
+}
+
+.sendBtn {
+	width: 40%;
+	margin: 10px auto;
+	height: 30px;
+	border: none;
+	background-color: blue;
+	color: white;
+	font-weight: bold;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.editError {
+	text-align: center;
+	color: red;
+	font-size: 16px;
+}
+
+.cats {
+	width: 500px;
+	height: 400px;
+	display: flex;
+	flex-direction: column;
+}
+
+.catsTitle {
+	font-size: 18px;
+}
+
+.allCats {
+	overflow: scroll;
+	padding: 10px;
+	background-color: #dddddd;
+	border-radius: 10px;
+	margin: 10px;
+	height: 40%;
+	width: 95%;
+}
+
+.placeCats {
+	overflow: scroll;
+	background-color: #dddddd;
+	border-radius: 10px;
+	padding: 10px;
+	height: 40%;
+	width: 95%;
+	margin: 10px;
+}
+
+.possibleCat {
+	overflow: scroll;
+	cursor: pointer;
+	width: 100px;
+	background-color: rgb(27, 201, 27);
+	margin: 5px;
+	height: 30px;
+	text-align: center;
+	color: white;
+	font-weight: bold;
+	border-radius: 5px;
+	line-height: 30px;
+}
+
+.saveCatsBtn {
+	cursor: pointer;
+	border: none;
+	background-color: rgb(18, 213, 18);
+	color: white;
+	width: 100px;
+	height: 40px;
+	font-weight: bold;
+	font-size: 16px;
+	margin: 0 auto;
+	border-radius: 10px;
+	transition: all ease 0.4s;
+}
+
+.saveCatsBtn:hover {
+	background-color: rgb(89, 255, 60);
+	scale: 1.1;
+}
+
+.catsError {
+	color: red;
+	text-align: center;
+	margin-top: 5px;
+}

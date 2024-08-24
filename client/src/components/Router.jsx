@@ -9,6 +9,7 @@ import FriendsPage from './pages/FriendsPage'
 import PlacePage from './pages/PlacePage'
 import PlacesPage from './pages/PlacesPage'
 import PlaceCreate from './PlaceCreate/PlaceCreate'
+import FavouritePage from './pages/FavouritePage'
 
 const Router = () => {
 	return (
@@ -25,6 +26,7 @@ const Router = () => {
 				<Route path='/place/:id' element={<PlacePage />} />
 				<Route path='/places' element={<PlacesPage />} />
 				<Route path='/placeCreate' element={<PlaceCreate />} />
+				<Route path='/favourite' element={<FavouritePage />} />
 			</Routes>
 		</BrowserRouter>
 	)
