@@ -20,6 +20,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { PlaceCreationDto } from './dto/place.dto'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { ValidationPipe } from 'src/pipes/validation.pipe'
+import { SearchDto } from './dto/search.dto'
 
 @Controller('place')
 export class PlaceController {
@@ -28,6 +29,11 @@ export class PlaceController {
 	@Get()
 	async getAllPlaces() {
 		return this.placeService.getAllPlaces()
+	}
+
+	@Get('/search')
+	async searchPlaces(@Body() dto: SearchDto) {
+		return this.placeService.searchPlaces(dto)
 	}
 
 	@UseGuards(JwtAuthGuard)

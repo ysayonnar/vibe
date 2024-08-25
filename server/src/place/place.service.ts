@@ -8,6 +8,7 @@ import { CategoryService } from 'src/category/category.service'
 import { NotFoundException } from 'src/exceptions/not-found.exception'
 import { ServerErrorException } from 'src/exceptions/server-error.exception'
 import { NotBelongsException } from 'src/exceptions/not-belongs.exception'
+import { SearchDto } from './dto/search.dto'
 
 @Injectable()
 export class PlaceService {
@@ -62,6 +63,20 @@ export class PlaceService {
 		})
 
 		return places
+	}
+
+	async searchPlaces(dto: SearchDto) {
+		let places: Place[] = await this.findPlaceByName(dto.searchQuery)
+		places = places.filter(place => place.calculatedRating >= dto.minimalRate)
+		if (dto.categoriesIds.length === 0) {
+			return { length: places.length, places }
+		} else {
+			const newPlaces = places.filter(place => {
+				const placeCategoryIds = place.categories.map(category => category.id)
+				return dto.categoriesIds.every(id => placeCategoryIds.includes(id))
+			})
+			return { length: newPlaces.length, places: newPlaces }
+		}
 	}
 
 	async getPlaceById(id: number) {
@@ -159,7 +174,9 @@ export class PlaceService {
 	}
 
 	async findPlaceByName(searchQuery: string) {
-		const places: Place[] = await this.PlaceRepository.findAll()
+		const places: Place[] = await this.PlaceRepository.findAll({
+			include: { all: true },
+		})
 		const foundedPlaces: Place[] = []
 		for (let i = 0; i < places.length; i++) {
 			const place: Place = places[i]
@@ -172,7 +189,7 @@ export class PlaceService {
 		}
 
 		if (foundedPlaces.length === 0) {
-			return { msg: 'Nothing found.' }
+			return []
 		}
 		return foundedPlaces
 	}
