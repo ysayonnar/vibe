@@ -22,6 +22,7 @@ import { Roles } from 'src/auth/roles-auth.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { ValidationPipe } from 'src/pipes/validation.pipe'
+import { UserCreationDto } from './dto/user-creation.dto'
 
 @Controller('user')
 export class UserController {
@@ -108,6 +109,15 @@ export class UserController {
 	@Put('/avatar')
 	async changeAvatar(@Req() req, @UploadedFile() image) {
 		return this.userService.changeAvatar(image, req.user)
+	}
+
+	@UseInterceptors(FileInterceptor('image'))
+	@Post('/createAvatar')
+	async createUserWithAvatar(
+		@Body() dto: UserCreationDto,
+		@UploadedFile() image
+	) {
+		return this.userService.createUserWithAvatar(dto, image)
 	}
 
 	@UseGuards(JwtAuthGuard)

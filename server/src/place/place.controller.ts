@@ -31,6 +31,7 @@ export class PlaceController {
 		return this.placeService.getAllPlaces()
 	}
 
+	@UsePipes()
 	@Get('/search')
 	async searchPlaces(@Body() dto: SearchDto) {
 		return this.placeService.searchPlaces(dto)

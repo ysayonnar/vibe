@@ -1,3 +1,4 @@
+import { CreateUserWithAvatar } from './dto/createUserWithAvatar.dto'
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { User } from './user.model'
 import { UserCreationDto } from './dto/user-creation.dto'
@@ -222,6 +223,14 @@ export class UserService {
 			await this.filesService.rewriteFile(file, user.avatar)
 		}
 		return user
+	}
+
+	async createUserWithAvatar(dto: UserCreationDto, image) {
+		if (!image) {
+			throw new HttpException('image required', HttpStatus.BAD_REQUEST)
+		}
+
+		//else вернуть из auth reqistration + провалидировать
 	}
 
 	async deleteAvatar(jwtUser) {

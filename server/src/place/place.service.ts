@@ -19,7 +19,7 @@ export class PlaceService {
 		readonly categoryService: CategoryService
 	) {}
 
-	isPlaceInRadius(target, places, radius: number = 5): boolean {
+	isPlaceInRadius(target, places, radius: number = 100): boolean {
 		const R = 6371e3 // Радиус Земли в метрах
 
 		function toRadians(degrees: number): number {
@@ -68,6 +68,13 @@ export class PlaceService {
 	async searchPlaces(dto: SearchDto) {
 		let places: Place[] = await this.findPlaceByName(dto.searchQuery)
 		places = places.filter(place => place.calculatedRating >= dto.minimalRate)
+		// if (!dto.searchQuery) {
+		// 	throw new HttpException(
+		// 		'Search query required, even null',
+		// 		HttpStatus.BAD_REQUEST
+		// 	)
+		// }
+
 		if (dto.categoriesIds.length === 0) {
 			return { length: places.length, places }
 		} else {
